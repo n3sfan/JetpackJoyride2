@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: fd673f77db0f2f545858bc3df2aa9bad
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - floor: {fileID: 5131083196450190560, guid: 28fe9e4fb1fb6884db1fd07a852ad7fd, type: 3}
+  - prefabRocket: {fileID: 1305597604340209002, guid: 43130bf65466f204cbed639a468bad07, type: 3}
+  - prefabLaserBall: {fileID: 7244188966110358785, guid: 258f739160f03554ab203d36df12eace, type: 3}
+  - prefabLaser: {fileID: 7318730806322644533, guid: a5da549ffe0ed504185bebf8a8dec174, type: 3}
+  - prefabLaserBeam: {fileID: 1819899742503224579, guid: 3014ff15940dfbe49b20c4b43e568c2b, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
