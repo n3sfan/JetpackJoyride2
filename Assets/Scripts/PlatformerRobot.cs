@@ -5,7 +5,9 @@ using UnityEngine;
 
 public class PlatformerRobot : MonoBehaviour
 {
-    private float jumpForce = 6f;
+    public static float ROBOT_HEIGHT = 2.3f;
+
+    private float jumpForce = 10f;
 
     private Rigidbody2D body;
 
@@ -22,7 +24,7 @@ public class PlatformerRobot : MonoBehaviour
         // Vector2 movement = new Vector2(deltaX, body.velocity.y);
         // body.velocity = movement;
 
-        if (Input.GetKeyDown(KeyCode.Space)) {
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow)) {
             body.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         }
     }

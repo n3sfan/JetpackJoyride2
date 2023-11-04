@@ -4,11 +4,17 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+/**
+* Sàn di chuyển lùi. Ra khỏi màn hình sẽ bị xóa. => Sàn mới được spawn tiếp
+*/
 public class MovingFloor : MonoBehaviour
 {
     public Transform floor;
     public GameObject floorPrefab; 
 
+    /**
+    * Di chuyển lùi
+    */
     public float moveSpeed;
     public State state;
 
@@ -27,19 +33,23 @@ public class MovingFloor : MonoBehaviour
             return;
         }
 
+        // Di chuyển lùi
         float x = floor.position.x - moveSpeed * Time.deltaTime;
         floor.position = new Vector3(x, floor.position.y, floor.position.z);
         
         // Not x <= 0 for glitch
         if (this.state == State.INITIAL && x <= 0.5f) {
-            Instantiate(floorPrefab, new Vector3(LevelController.FLOOR_WIDTH / 2, -4, 0), Quaternion.identity);
+            Instantiate(floorPrefab, new Vector3(LevelController.WIDTH / 2, -4, 0), Quaternion.identity);
             this.state = State.PAST_ONE_HALF;
-        } else if (this.state == State.PAST_ONE_HALF && x <= -LevelController.FLOOR_WIDTH / 2) {
+        } else if (this.state == State.PAST_ONE_HALF && x <= -LevelController.WIDTH / 2) {
             this.state = State.INVISIBLE;
             Destroy(gameObject);
         }
     }
 
+    /**
+    * Trạng thái của Sàn
+    */
     public enum State {
         INITIAL,
         PAST_ONE_HALF,

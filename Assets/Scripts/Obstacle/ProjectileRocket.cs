@@ -7,18 +7,31 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Obstacle {
+    /**
+    * 
+    */
     public class ProjectileRocket : ObstacleBase {
+        // Di chuyển lùi
         private float speed = 12f;
+        // TODO: Xem lai bien nay nen su dung cho ten lua nhu the nao?
         public bool moveUpwards;
         public GameObject prefabAlertRocket;
         private GameObject alertRocket;
+        // Giây
         private float seconds;
+        
+        // Lần trước quay lên hay xuống?
         private bool rotateUp;
+
+        // Chiều rộng tên lửa (theo trục x)
+        float rocketWidth = 1.5f;
 
         // Start is called before the first frame update
         void Start() {
+            // Cảnh báo tên lửa sắp đến
             float alertWidth = 0.5f;
-            float x = LevelController.FLOOR_WIDTH / 2 - alertWidth;
+            float x = LevelController.WIDTH / 2 - alertWidth;
+            // Khởi tạo Cảnh báo
             alertRocket = Instantiate(prefabAlertRocket, new Vector3(x, this.gameObject.transform.position.y, 0), Quaternion.identity);
         }
 
@@ -26,6 +39,7 @@ namespace Obstacle {
         void Update() {
             float y = 0;
 
+            // Di chuyen lui
             Transform transform = this.gameObject.transform;
             Vector3 movement = new Vector3(-speed, y, 0);
             transform.Translate(movement * Time.deltaTime);
@@ -33,23 +47,24 @@ namespace Obstacle {
             // Rotate rocket
             seconds += Time.deltaTime;
 
-            // Sau 0.5s, ten lua bi quay len/xuong
+            // Sau 0.5s, quay tên lửa lên hoặc xuống (tùy theo lần trước)
             // TODO Smooth rotation
             if (seconds >= 0.1f) {
                 if (rotateUp) {
+                    // Neu ten lua da quay len, bay gio quay xuong
                     transform.localEulerAngles = new Vector3(0, 0, -5f);
-                }
-                else {
+                } else {
+                    // Nguoc lai
                     transform.localEulerAngles = new Vector3(0, 0, 5f);
                 }
 
+                // Lần tiếp tên lửa sẽ quay ngược hướng với lúc này
                 rotateUp = !rotateUp;
                 seconds = 0f;
             }
 
-            float rocketWidth = 1.5f;
 
-            if (transform.position.x <= LevelController.FLOOR_WIDTH / 2 + rocketWidth) {
+            if (transform.position.x <= LevelController.WIDTH / 2 + rocketWidth) {
                 Destroy(alertRocket);
             }
             // if (transform.position.x <= -LevelController.FLOOR_WIDTH / 2 - rocketWidth) {
