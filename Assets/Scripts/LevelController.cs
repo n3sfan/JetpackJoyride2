@@ -182,7 +182,7 @@ public class LevelController : MonoBehaviour {
         GameObject ball1 = Instantiate(prefabLaserBall, ballPos1, Quaternion.identity);
         GameObject ball2 = Instantiate(prefabLaserBall, ballPos2, Quaternion.identity);
         GameObject laser = Instantiate(prefabLaser, laserPos, rotation);
-        laser.transform.localScale = new Vector3(Vector3.Distance(ballPos1, ballPos2), laser.transform.localScale.y);
+        laser.transform.localScale = new Vector3(Vector3.Distance(ballPos1, ballPos2) * (32f / 128f), laser.transform.localScale.y);
 
         // Vị trí của 3 GameObject con (ball 1 + 2, laser) sẽ trở nên tương đối với GameObject parent (laserBeam).
         // Tức là laserBeam làm gốc tọa độ của 3 GameObject con
