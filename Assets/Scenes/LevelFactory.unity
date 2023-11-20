@@ -182,7 +182,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 333faf627990fbf4c872bd751421d4b5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c224369d681f8f643a9987955f9e34eb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -202,8 +202,8 @@ Transform:
   m_GameObject: {fileID: 17853814}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.0157, y: 4.681, z: 0}
-  m_LocalScale: {x: 22.89965, y: 0.56196445, z: 1}
+  m_LocalPosition: {x: -0.0803, y: 4.4147, z: 0}
+  m_LocalScale: {x: 3.128372, y: 1.745968, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -240,18 +240,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.026888609, y: 0.012044847}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 7.33, y: 0.67}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 7.3458295, y: 0.6868359}
   m_EdgeRadius: 0
 --- !u!1 &64302308
 GameObject:
@@ -363,8 +363,8 @@ Transform:
   m_GameObject: {fileID: 64302308}
   serializedVersion: 2
   m_LocalRotation: {x: -0.017184913, y: -0, z: -0, w: 0.99985236}
-  m_LocalPosition: {x: -5.3234, y: -2.3386, z: 0.0144}
-  m_LocalScale: {x: 2.2678075, y: 2.5013795, z: 1}
+  m_LocalPosition: {x: -8.8558, y: -2.3163, z: 0.0133}
+  m_LocalScale: {x: 2.0673332, y: 2.2004635, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -377,7 +377,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 64302308}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: f59e5fcc6256f424a8b7b2a92b36b05a, type: 2}
   m_CullingMode: 0
@@ -593,8 +593,6 @@ MonoBehaviour:
   initialSpeed: 5
   acceleration: 0.5
   Obstacles: {fileID: 0}
-  minTimeBetweenObstacles: 1
-  maxTimeBetweenObstacles: 3
 --- !u!1001 &1372784968418295442
 PrefabInstance:
   m_ObjectHideFlags: 0
