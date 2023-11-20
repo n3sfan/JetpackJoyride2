@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlatformerRobot : MonoBehaviour
 {
-    public static float ROBOT_HEIGHT = 2.3f;
+    public static float ROBOT_HEIGHT = 1.5f;
 
     private float jumpForce = 10f;
 

@@ -202,8 +202,8 @@ Transform:
   m_GameObject: {fileID: 17853814}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0033, y: 4.7, z: 0}
-  m_LocalScale: {x: 19.892668, y: 0.6, z: 1}
+  m_LocalPosition: {x: 0.0157, y: 4.681, z: 0}
+  m_LocalScale: {x: 22.89965, y: 0.56196445, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -270,6 +270,7 @@ GameObject:
   m_Layer: 0
   m_Name: Robot
   m_TagString: Robot
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -342,7 +343,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -1699229627, guid: 533a49396a2c06443b123ee15a715ef9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ce55d9e961fa28c4d98d140200630cfc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -361,13 +362,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 64302308}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5, y: -1.92, z: 0}
-  m_LocalScale: {x: 3.2786, y: 3.8103, z: 1}
+  m_LocalRotation: {x: -0.017184913, y: -0, z: -0, w: 0.99985236}
+  m_LocalPosition: {x: -5.3234, y: -2.3386, z: 0.0144}
+  m_LocalScale: {x: 2.2678075, y: 2.5013795, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -1.969, y: 0, z: 0}
 --- !u!95 &64302312
 Animator:
   serializedVersion: 5
@@ -437,7 +438,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.32, y: 0.64}
+    oldSize: {x: 0.64, y: 0.64}
     newSize: {x: 0.32, y: 0.64}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -589,6 +590,11 @@ MonoBehaviour:
   prefabLaser: {fileID: 7318730806322644533, guid: a5da549ffe0ed504185bebf8a8dec174, type: 3}
   prefabLaserBeam: {fileID: 1819899742503224579, guid: 3014ff15940dfbe49b20c4b43e568c2b, type: 3}
   state: 0
+  initialSpeed: 5
+  acceleration: 0.5
+  Obstacles: {fileID: 0}
+  minTimeBetweenObstacles: 1
+  maxTimeBetweenObstacles: 3
 --- !u!1001 &1372784968418295442
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -607,19 +613,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7017318119537548574, guid: 28fe9e4fb1fb6884db1fd07a852ad7fd, type: 3}
       propertyPath: m_LocalScale.x
-      value: 3.9858258
+      value: 4.5642242
       objectReference: {fileID: 0}
     - target: {fileID: 7017318119537548574, guid: 28fe9e4fb1fb6884db1fd07a852ad7fd, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.39792213
+      value: 0.38272148
       objectReference: {fileID: 0}
     - target: {fileID: 7017318119537548574, guid: 28fe9e4fb1fb6884db1fd07a852ad7fd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.0078
+      value: 0.0303
       objectReference: {fileID: 0}
     - target: {fileID: 7017318119537548574, guid: 28fe9e4fb1fb6884db1fd07a852ad7fd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4
+      value: -4.038
       objectReference: {fileID: 0}
     - target: {fileID: 7017318119537548574, guid: 28fe9e4fb1fb6884db1fd07a852ad7fd, type: 3}
       propertyPath: m_LocalPosition.z

@@ -52,6 +52,14 @@ public class LevelController : MonoBehaviour {
     */
     private List<GameObject> activeObstacles;
 
+    public float initialSpeed = 5f; // Tốc độ ban đầu của chướng ngại vật
+    public float acceleration = 0.5f; // Tốc độ gia tăng
+
+    private float currentSpeed; // Tốc độ hiện tại của chướng ngại vật
+
+    public GameObject Obstacles ; // Tham chiếu đến game object của chướng ngại vật
+
+
     /**
     * Khởi tạo 1 số giá trị toàn cục hay dùng.
     */
@@ -71,19 +79,30 @@ public class LevelController : MonoBehaviour {
         MIN_PLAY_Y = MIN_Y + FLOOR_HEIGHT;
         MAX_PLAY_Y = MAX_Y - CEILING_HEIGHT;
     }
+   
 
-    void Start() {
+    private void Start()
+    {
         this.activeObstacles = new List<GameObject>();
+        currentSpeed = initialSpeed;
     }
 
-    // Update is called once per frame
-    void Update() {
+    private void Update()
+    {
         if (this.state == State.PLAYING) {
             SpawnProjectiles();
             SpawnLaserBeam();
             SpawnCayChup();
+            
         }
+            // Tăng tốc độ của chướng ngại vật dần dần
+            currentSpeed += acceleration * Time.deltaTime;
 
+            // Di chuyển chướng ngại vật theo tốc độ hiện tại
+            transform.Translate(Vector3.forward * currentSpeed * Time.deltaTime);
+
+
+    
         // Xóa Chướng ngại vật sau khi ra khỏi Camera.
         for (int i = this.activeObstacles.Count - 1; i >= 0; --i) {
             GameObject obstacle = this.activeObstacles[i];
@@ -95,7 +114,7 @@ public class LevelController : MonoBehaviour {
                 width = obstacle.GetComponent<SpriteRenderer>().bounds.size.x;
             }
 
-            width /= 2;
+            width /= 2; 
 
             if (obstacle.name.StartsWith("CayChup")) {
                 if (obstacle.transform.position.x <= -WIDTH / 2 - 30) {
@@ -184,7 +203,7 @@ public class LevelController : MonoBehaviour {
         ballPos2 = rotation * Vector3.right * (distanceToCameraRegion - LaserBeam.BALL_RADIUS) + ballPos1;
 
         // Frame này ko tìm thấy, để frame sau.
-        if (!(MIN_PLAY_Y + LaserBeam.BALL_RADIUS + PlatformerRobot.ROBOT_HEIGHT <= ballPos2.y && ballPos2.y <= MAX_PLAY_Y - LaserBeam.BALL_RADIUS)) {
+        if (!(MIN_PLAY_Y + LaserBeam.BALL_RADIUS + PlatformerRobot.ROBOT_HEIGHT <= ballPos2.y && ballPos2.y <= MAX_PLAY_Y - PlatformerRobot.ROBOT_HEIGHT)) {
             return;
         }
 
@@ -214,3 +233,4 @@ public class LevelController : MonoBehaviour {
         STOPPED // Khi Robot va chạm với Obstacle 
     }
 }
+
