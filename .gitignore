@@ -74,3 +74,6 @@ crashlytics-build.properties
 =======
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 >>>>>>> ba0085c0d7427465387422314469854e3d95fdc8
+
+# VS Code
+/.vscode/
