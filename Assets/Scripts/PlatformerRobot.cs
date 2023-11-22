@@ -19,6 +19,13 @@ public class PlatformerRobot : MonoBehaviour
     private float jumpForce = 0.05f;
 
     private Rigidbody2D body;
+    
+    private AudioManagerFactory audioManager;
+
+    void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManagerFactory>();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -59,7 +66,6 @@ public class PlatformerRobot : MonoBehaviour
         }
     }
 
-
     void OnTriggerEnter2D(Collider2D other) 
     {
         if (other.gameObject.tag.Equals("Obstacle")) {
@@ -67,6 +73,10 @@ public class PlatformerRobot : MonoBehaviour
 
             GameObject controller = GameObject.FindWithTag("GameController");
             controller.GetComponent<LevelController>().Stop();
+
+            audioManager.PlaySFX(audioManager.dieSoundClip);
+            Destroy(gameObject);
+            audioManager.musicAudioSource.Stop();
         }
     }
 }
