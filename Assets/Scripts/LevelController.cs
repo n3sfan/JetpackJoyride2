@@ -12,7 +12,7 @@ public class LevelController : MonoBehaviour {
     */
     public static float HEIGHT;
     public static float WIDTH;
-    /**
+    /** 
     * Chiều cao sàn, trần. 
     */
     public static float FLOOR_HEIGHT;
