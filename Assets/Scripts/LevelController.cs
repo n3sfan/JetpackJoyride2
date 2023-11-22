@@ -31,12 +31,15 @@ public class LevelController : MonoBehaviour {
     [SerializeField]
     private GameObject prefabRocket;
     [SerializeField]
+    private GameObject prefabCayChup;
+    [SerializeField]
     private GameObject prefabLaserBall;
     [SerializeField]
     private GameObject prefabLaser;
     [SerializeField]
     private GameObject prefabLaserBeam;
 
+    private float cayChupSeconds;
     private float rocketSeconds;
     private float laserSeconds;
     /**
@@ -89,6 +92,7 @@ public class LevelController : MonoBehaviour {
         if (this.state == State.PLAYING) {
             SpawnProjectiles();
             SpawnLaserBeam();
+            SpawnCayChup();
             
         }
             // Tăng tốc độ của chướng ngại vật dần dần
@@ -112,10 +116,16 @@ public class LevelController : MonoBehaviour {
 
             width /= 2; 
 
-            if (obstacle.transform.position.x <= -WIDTH / 2 - width) {
+            if (obstacle.name.StartsWith("CayChup")) {
+                if (obstacle.transform.position.x <= -WIDTH / 2 - 30) {
+                    Destroy(obstacle);
+                    this.activeObstacles.RemoveAt(i);
+                }
+            } 
+            else if (obstacle.transform.position.x <= -WIDTH / 2 - width) {
                 Destroy(obstacle);
                 this.activeObstacles.RemoveAt(i);
-            }
+            } 
         }
     }
 
@@ -144,6 +154,27 @@ public class LevelController : MonoBehaviour {
         this.activeObstacles.Add(rocket);
 
         rocketSeconds = 0;
+    }
+
+    private void SpawnCayChup() {
+        cayChupSeconds += Time.deltaTime;
+
+        // Sau 3 giây mới spawn 1 tên lửa
+        if (cayChupSeconds < 3) {
+            return;
+        }
+
+        GameObject caychup = Instantiate(prefabCayChup);
+        float x = -WIDTH / 2 - 25;
+        // Set vị trí
+        caychup.transform.position = new Vector3(x, Random.Range(-2f, 4.5f), 0);
+        // Phần thừa, đừng để ý
+        // CayChup script = caychup.GetComponent<CayChup>();
+        // script.moveUpwards = Random.Range(0, 2) == 0;
+
+        this.activeObstacles.Add(caychup);
+
+        cayChupSeconds = 0;
     }
 
     /**
