@@ -39,7 +39,7 @@ public class MovingFloor : MonoBehaviour
         
         // Not x <= 0 for glitch
         if (this.state == State.INITIAL && x <= 0.5f) {
-            Instantiate(floorPrefab, new Vector3(LevelController.WIDTH / 2, -4, 0), Quaternion.identity);
+            Instantiate(floorPrefab, new Vector3(LevelController.WIDTH / 2, -LevelController.HEIGHT / 2 + LevelController.FLOOR_HEIGHT / 2, 0), Quaternion.identity);
             this.state = State.PAST_ONE_HALF;
         } else if (this.state == State.PAST_ONE_HALF && x <= -LevelController.WIDTH / 2) {
             this.state = State.INVISIBLE;
