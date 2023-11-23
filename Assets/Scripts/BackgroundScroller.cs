@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Scroo : MonoBehaviour
+public class BackgroundScroller : MonoBehaviour
 {
     [Range(-1f, 1f)]
     public float scrollSpeed = 0.5f;
