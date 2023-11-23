@@ -19,6 +19,9 @@ public class PlatformerRobot : MonoBehaviour
     private float jumpForce = 0.05f;
 
     private Rigidbody2D body;
+
+    public GameObject[] hearts;
+    public int life;
     
     private AudioManagerFactory audioManager;
 
@@ -30,6 +33,7 @@ public class PlatformerRobot : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        life = hearts.Length;
         body = GetComponent<Rigidbody2D>();
     }
 
@@ -69,14 +73,22 @@ public class PlatformerRobot : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other) 
     {
         if (other.gameObject.tag.Equals("Obstacle")) {
-            this.gameObject.GetComponent<Animator>().enabled = false;
+            if (life >= 1)
+            {
+                life -= 1;
+                Destroy(hearts[life].gameObject);
+            }
+            if (life < 1)
+            {
+                this.gameObject.GetComponent<Animator>().enabled = false;
 
-            GameObject controller = GameObject.FindWithTag("GameController");
-            controller.GetComponent<LevelController>().Stop();
+                GameObject controller = GameObject.FindWithTag("GameController");
+                controller.GetComponent<LevelController>().Stop();
 
-            audioManager.PlaySFX(audioManager.dieSoundClip);
-            Destroy(gameObject);
-            audioManager.musicAudioSource.Stop();
+                audioManager.PlaySFX(audioManager.dieSoundClip);
+                Destroy(gameObject);
+                audioManager.musicAudioSource.Stop();
+            }
         }
-    }
+    }  
 }
