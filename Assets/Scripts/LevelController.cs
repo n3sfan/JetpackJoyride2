@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using Obstacle;
 using Unity.VisualScripting;
+using UnityEngine.SceneManagement; 
 
 
 public class LevelController : MonoBehaviour {
@@ -42,6 +43,26 @@ public class LevelController : MonoBehaviour {
     private float cayChupSeconds;
     private float rocketSeconds;
     private float laserSeconds;
+    private void PawnArc1()
+    {
+        // Chỉ spawn tên lửa ở arc 1
+        SpawnProjectiles();
+    }
+
+    private void PawnArc2()
+    {
+        // Spawn cả tên lửa và laser ở arc 2
+        SpawnProjectiles();
+        SpawnLaserBeam();
+    }
+
+    private void PawnArc3()
+    {
+        // Spawn tên lửa, laser và cây chụp ở arc 3
+        SpawnProjectiles();
+        SpawnLaserBeam();
+        SpawnCayChup();
+    }
     /**
     * Trạng thái Màn chơi. 
     */
@@ -84,15 +105,28 @@ public class LevelController : MonoBehaviour {
     private void Start()
     {
         this.activeObstacles = new List<GameObject>();
-        currentSpeed = initialSpeed;
+        currentSpeed = initialSpeed;       
     }
 
     private void Update()
     {
         if (this.state == State.PLAYING) {
-            SpawnProjectiles();
-            SpawnLaserBeam();
-            SpawnCayChup();
+            // Gọi hàm pawn tương ứng cho mỗi arc khi trò chơi bắt đầu
+            if (SceneManager.GetActiveScene().name == "LevelFactory")
+            {
+                PawnArc1();
+            }
+            else if (SceneManager.GetActiveScene().name == "Leveloutside")
+            {
+                PawnArc2();
+            }
+            else if (SceneManager.GetActiveScene().name == "Arc3")
+            {
+                PawnArc3();
+            }
+            //SpawnProjectiles();
+            //SpawnLaserBeam();
+            //SpawnCayChup();
             
         }
             // Tăng tốc độ của chướng ngại vật dần dần
