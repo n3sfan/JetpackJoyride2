@@ -401,6 +401,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b86d533a02a610a4ea884319669e5f94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hearts: []
+  life: 0
 --- !u!61 &64302314
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -667,8 +669,8 @@ Transform:
   m_GameObject: {fileID: 1210745333}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.04, y: 0.84, z: 0}
-  m_LocalScale: {x: 4.505372, y: 3.6423512, z: 1}
+  m_LocalPosition: {x: -0.0636, y: 1.5713, z: 0}
+  m_LocalScale: {x: 4.62505, y: 4.3040414, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -962,8 +964,8 @@ Transform:
   m_GameObject: {fileID: 1775789871}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.03, y: 1.12, z: 5}
-  m_LocalScale: {x: 23.121937, y: 5.7179284, z: 7.1474104}
+  m_LocalPosition: {x: -0.088, y: 1.3087, z: 5}
+  m_LocalScale: {x: 23.638927, y: 6.0950456, z: 7.1474104}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1114,19 +1116,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7017318119537548574, guid: 28fe9e4fb1fb6884db1fd07a852ad7fd, type: 3}
       propertyPath: m_LocalScale.x
-      value: 4.5041304
+      value: 4.623911
       objectReference: {fileID: 0}
     - target: {fileID: 7017318119537548574, guid: 28fe9e4fb1fb6884db1fd07a852ad7fd, type: 3}
       propertyPath: m_LocalScale.y
-      value: 2.7408848
+      value: 2.6098704
       objectReference: {fileID: 0}
     - target: {fileID: 7017318119537548574, guid: 28fe9e4fb1fb6884db1fd07a852ad7fd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.0707
       objectReference: {fileID: 0}
     - target: {fileID: 7017318119537548574, guid: 28fe9e4fb1fb6884db1fd07a852ad7fd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4
+      value: -4.0472
       objectReference: {fileID: 0}
     - target: {fileID: 7017318119537548574, guid: 28fe9e4fb1fb6884db1fd07a852ad7fd, type: 3}
       propertyPath: m_LocalPosition.z
