@@ -52,5 +52,5 @@
         "Temp/": true
     },
     "dotnet.preferCSharpExtension": true,
-    "dotnet.defaultSolution": "JetpackJoyride2.sln"
+    "dotnet.defaultSolution": "Gamejetpackjoyride.sln"
 }
