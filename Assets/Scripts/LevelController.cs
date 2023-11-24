@@ -43,6 +43,8 @@ public class LevelController : MonoBehaviour {
     private float cayChupSeconds;
     private float rocketSeconds;
     private float laserSeconds;
+    private float accelerationArc3 = 5.0f;
+
     private void PawnArc1()
     {
         // Chỉ spawn tên lửa ở arc 1
@@ -60,7 +62,7 @@ public class LevelController : MonoBehaviour {
     {
         // Spawn tên lửa, laser và cây chụp ở arc 3
         SpawnProjectiles();
-        SpawnLaserBeam();
+        SpawnLaserBeam3();
         SpawnCayChup();
     }
     /**
@@ -114,7 +116,8 @@ public class LevelController : MonoBehaviour {
             // Gọi hàm pawn tương ứng cho mỗi arc khi trò chơi bắt đầu
             if (SceneManager.GetActiveScene().name == "LevelFactory")
             {
-                PawnArc1();
+                PawnArc3();
+                currentSpeed += accelerationArc3 * Time.deltaTime;
             }
             else if (SceneManager.GetActiveScene().name == "Leveloutside")
             {
@@ -193,8 +196,8 @@ public class LevelController : MonoBehaviour {
     private void SpawnCayChup() {
         cayChupSeconds += Time.deltaTime;
 
-        // Sau 3 giây mới spawn 1 tên lửa
-        if (cayChupSeconds < 3) {
+        // Sau 5 giây mới spawn 1 tên lửa
+        if (cayChupSeconds < 5) {
             return;
         }
 
@@ -257,6 +260,53 @@ public class LevelController : MonoBehaviour {
         laser.transform.parent = laserBeam.transform;
 
         this.activeObstacles.Add(laserBeam);
+
+        laserSeconds = 0;
+    }
+
+    private void SpawnLaserBeam3() {
+        laserSeconds += Time.deltaTime;
+
+        // Sau Random(5, 8) giây mới spawn laser beam
+        if (laserSeconds < Random.Range(4, 7)) {
+            return;
+        }
+
+        float minLaserLength = 2f, maxLaserLength = 5f;
+        // Random khoảng cách giữa 2 ball
+        float distanceToCameraRegion = Random.Range(minLaserLength, maxLaserLength);
+
+        // Random tọa độ ball 1
+        Vector3 ballPos1 = new Vector3(MAX_X + distanceToCameraRegion, Random.Range(MIN_PLAY_Y + LaserBeam3.BALL_RADIUS, MAX_PLAY_Y - LaserBeam3.BALL_RADIUS));
+        Vector3 ballPos2;
+        Quaternion rotation;
+
+        // TODO Tìm ball 2, sao cho vị trí ball 2 nằm trong Camera.
+        rotation = Quaternion.AngleAxis(Random.Range(-180f, 180f), new Vector3(0, 0, 1));
+        // Tọa độ ball 2 = ballPos1 + vector (1, 0, 0) quay quanh trục z góc theta
+        ballPos2 = rotation * Vector3.right * (distanceToCameraRegion - LaserBeam3.BALL_RADIUS) + ballPos1;
+
+        // Frame này ko tìm thấy, để frame sau.
+        if (!(MIN_PLAY_Y + LaserBeam3.BALL_RADIUS + PlatformerRobot.ROBOT_HEIGHT <= ballPos2.y && ballPos2.y <= MAX_PLAY_Y - PlatformerRobot.ROBOT_HEIGHT)) {
+            return;
+        }
+
+        Vector3 laserPos = (ballPos1 + ballPos2) / 2;
+
+        // Khởi tạo ball 1, 2 và tia laser
+        GameObject ball1 = Instantiate(prefabLaserBall, ballPos1, Quaternion.identity);
+        GameObject ball2 = Instantiate(prefabLaserBall, ballPos2, Quaternion.identity);
+        GameObject laser = Instantiate(prefabLaser, laserPos, rotation);
+        laser.transform.localScale = new Vector3(Vector3.Distance(ballPos1, ballPos2) * (32f / 128f), laser.transform.localScale.y);
+
+        // Vị trí của 3 GameObject con (ball 1 + 2, laser) sẽ trở nên tương đối với GameObject parent (laserBeam).
+        // Tức là laserBeam làm gốc tọa độ của 3 GameObject con
+        GameObject laserBeam3 = Instantiate(prefabLaserBeam, laserPos, Quaternion.identity);
+        ball1.transform.parent = laserBeam3.transform;
+        ball2.transform.parent = laserBeam3.transform;
+        laser.transform.parent = laserBeam3.transform;
+
+        this.activeObstacles.Add(laserBeam3);
 
         laserSeconds = 0;
     }
