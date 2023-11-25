@@ -22,6 +22,8 @@ public class PlatformerRobot : MonoBehaviour
 
     public GameObject[] hearts;
     public int life;
+
+    public GameObject gameOverUI;
     
     private AudioManagerFactory audioManager;
 
@@ -35,6 +37,7 @@ public class PlatformerRobot : MonoBehaviour
     {
         life = hearts.Length;
         body = GetComponent<Rigidbody2D>();
+        gameOverUI.SetActive(false);
     }
 
     // Update is called once per frame
@@ -70,6 +73,7 @@ public class PlatformerRobot : MonoBehaviour
         }
     }
 
+
     void OnTriggerEnter2D(Collider2D other) 
     {
         if (other.gameObject.tag.Equals("Obstacle")) {
@@ -79,7 +83,8 @@ public class PlatformerRobot : MonoBehaviour
                 Destroy(hearts[life].gameObject);
             }
             if (life < 1)
-            {
+            {   
+                gameOverUI.SetActive(true);
                 this.gameObject.GetComponent<Animator>().enabled = false;
 
                 GameObject controller = GameObject.FindWithTag("GameController");
@@ -88,7 +93,9 @@ public class PlatformerRobot : MonoBehaviour
                 audioManager.PlaySFX(audioManager.dieSoundClip);
                 Destroy(gameObject);
                 audioManager.musicAudioSource.Stop();
+
             }
+            
         }
     }  
 }
