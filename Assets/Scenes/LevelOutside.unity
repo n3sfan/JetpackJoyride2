@@ -236,6 +236,7 @@ MonoBehaviour:
   - {fileID: 642908697}
   - {fileID: 1319859449}
   life: 3
+  gameOverUI: {fileID: 0}
 --- !u!95 &53773618
 Animator:
   serializedVersion: 5
@@ -1124,7 +1125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad5c6a75e28649f4d84ac5d89ea90c33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollSpeed: 0.73
+  scrollSpeed: 0.33
 --- !u!23 &1081099907
 MeshRenderer:
   m_ObjectHideFlags: 0
