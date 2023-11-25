@@ -44,8 +44,6 @@ public class PlatformerRobot : MonoBehaviour
         // Giảm lực nhảy
         // Lực nhảy dựa trên jetpack đã bật hết công suất chưa?
 
-        Debug.Log(jumpForce);
-
         if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow)) {
             jumpIncreaseTime += Time.deltaTime;
 
