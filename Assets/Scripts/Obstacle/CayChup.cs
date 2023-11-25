@@ -41,7 +41,7 @@ namespace Obstacle {
             float y = 0;
 
             GameObject robot = GameObject.FindGameObjectWithTag("Robot");
-
+        // null
             // Di chuyen toi
             Transform transform = this.gameObject.transform;
             if (transform.position.x > robot.transform.position.x) speed *= -1;
