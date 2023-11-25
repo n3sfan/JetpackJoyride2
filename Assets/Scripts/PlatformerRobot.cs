@@ -7,8 +7,8 @@ using UnityEngine;
 public class PlatformerRobot : MonoBehaviour
 {
     public static float ROBOT_HEIGHT = 1.5f;
-    public static float MIN_JUMP_FORCE = 0.05f;
-    public static float MAX_JUMP_FORCE = 0.1f;
+    public static float MIN_JUMP_FORCE = 0.04f;
+    public static float MAX_JUMP_FORCE = 0.08f;
     private static float[] POWER_LEVEL_JUMP_FORCES = { 0.05f, 0.07f, 0.09f, 0.1f, 0.15f, 0.25f};
 
     // Thời gian bật jetpack
@@ -16,7 +16,7 @@ public class PlatformerRobot : MonoBehaviour
     private float lastForceIncreasedTime = 0f;
     private float jumpDecreaseTime = 0f;
     private float lastForceDecreasedTime = 0f;
-    private float jumpForce = 0.05f;
+    private float jumpForce = 0.04f;
 
     private Rigidbody2D body;
 
