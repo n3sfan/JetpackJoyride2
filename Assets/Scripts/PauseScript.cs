@@ -9,4 +9,12 @@ public class pause : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+    public void quit()
+    {
+        Application.Quit();
+    }
+    public void mainmenu()
+    {
+        SceneManager.LoadScene(0);
+    }
 }
