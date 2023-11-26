@@ -4,14 +4,18 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Score : MonoBehaviour
-{
+{   
+    private bool isPaused = false;
     public float timeValue = 0;
     public Text timerText;
 
     void Update()
     {
-        timeValue += Time.deltaTime;
-        DisplayTime(timeValue);
+        if (!isPaused)
+        {
+            timeValue += Time.deltaTime;
+            DisplayTime(timeValue);
+        }
     }
 
     void DisplayTime(float timeToDisplay)
@@ -22,6 +26,13 @@ public class Score : MonoBehaviour
 
         timerText.text = string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, milliseconds);
     }
+    public void PauseTimer()
+    {
+        isPaused = true;
+    }
 
-
+    public void ResumeTimer()
+    {
+        isPaused = false;
+    }
 }
