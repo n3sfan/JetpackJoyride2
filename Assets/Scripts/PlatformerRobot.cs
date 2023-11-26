@@ -93,7 +93,6 @@ public class PlatformerRobot : MonoBehaviour
                 audioManager.PlaySFX(audioManager.dieSoundClip);
                 Destroy(gameObject);
                 audioManager.musicAudioSource.Stop();
-
             }
             
         }

@@ -11,12 +11,12 @@ public class AudioManagerFactory : MonoBehaviour
 
     // tao bien luu tru audio Clip
 
-    public AudioClip arcFactoryMusicClip;
+    public AudioClip arcMusicClip;
     public AudioClip dieSoundClip;
 
     void Start()
     {
-        musicAudioSource.clip = arcFactoryMusicClip;
+        musicAudioSource.clip = arcMusicClip;
         musicAudioSource.Play();
     }
 

@@ -778,7 +778,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicAudioSource: {fileID: 977754272}
   vfxAudioSource: {fileID: 213107163}
-  arcFactoryMusicClip: {fileID: 8300000, guid: ad04b4a2b9263504e9d36cf4bdf7add0, type: 3}
+  arcMusicClip: {fileID: 8300000, guid: 9b9146aef0993fb47a9a12a26c91af3c, type: 3}
   dieSoundClip: {fileID: 8300000, guid: fc65d50f75fcc8a41baeb346e399745b, type: 3}
 --- !u!4 &342998688
 Transform:
