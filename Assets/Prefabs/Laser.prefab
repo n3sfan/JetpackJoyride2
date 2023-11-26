@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3694489395575953428}
   - component: {fileID: 2191487970800465700}
   - component: {fileID: -6954388604249566093}
+  - component: {fileID: 4879497385676276742}
   m_Layer: 0
   m_Name: Laser
   m_TagString: Obstacle
@@ -74,7 +75,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -1
-  m_Sprite: {fileID: 21300000, guid: 08e7c9ef95e0b31459772b1ef5ac5c72, type: 3}
+  m_Sprite: {fileID: -2065190980, guid: d8b28dca40c39b443a99569b66e6fde6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -130,3 +131,24 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 3.9960947, y: 0.5530135}
   m_EdgeRadius: 0
+--- !u!95 &4879497385676276742
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7318730806322644533}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 96e6964593f44f048b167cd91f7cef5d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

@@ -119,11 +119,11 @@ public class LevelController : MonoBehaviour {
                 PawnArc3();
                 currentSpeed += accelerationArc3 * Time.deltaTime;
             }
-            else if (SceneManager.GetActiveScene().name == "Leveloutside")
+            else if (SceneManager.GetActiveScene().name == "LevelOutside")
             {
                 PawnArc2();
             }
-            else if (SceneManager.GetActiveScene().name == "Arc3")
+            else if (SceneManager.GetActiveScene().name == "LevelEnd")
             {
                 PawnArc3();
             }

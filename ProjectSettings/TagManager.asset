@@ -7,6 +7,7 @@ TagManager:
   - Obstacle
   - Robot
   - Audio
+  - Timer
   layers:
   - Default
   - TransparentFX
