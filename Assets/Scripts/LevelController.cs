@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using Obstacle;
 using Unity.VisualScripting;
-using UnityEngine.SceneManagement; 
+using UnityEngine.SceneManagement;
 
 
 public class LevelController : MonoBehaviour {
@@ -39,36 +39,22 @@ public class LevelController : MonoBehaviour {
     private GameObject prefabLaser;
     [SerializeField]
     private GameObject prefabLaserBeam;
+    [SerializeField]
+    private GameObject prefabFactoryWall;
+    [SerializeField]
+    private GameObject prefabBackground;
 
     private float cayChupSeconds;
     private float rocketSeconds;
     private float laserSeconds;
     private float accelerationArc3 = 5.0f;
 
-    private void PawnArc1()
-    {
-        // Chỉ spawn tên lửa ở arc 1
-        SpawnProjectiles();
-    }
-
-    private void PawnArc2()
-    {
-        // Spawn cả tên lửa và laser ở arc 2
-        SpawnProjectiles();
-        SpawnLaserBeam();
-    }
-
-    private void PawnArc3()
-    {
-        // Spawn tên lửa, laser và cây chụp ở arc 3
-        SpawnProjectiles();
-        SpawnLaserBeam3();
-        SpawnCayChup();
-    }
     /**
     * Trạng thái Màn chơi. 
     */
     public State state;
+    private int levelIndex = 1;
+    private string[] levelNames = { "LevelFactory", "LevelOutside", "LevelEnd"};
 
     /**
     * List chướng ngại vật còn nằm trong Camera.
@@ -77,11 +63,20 @@ public class LevelController : MonoBehaviour {
 
     public float initialSpeed = 5f; // Tốc độ ban đầu của chướng ngại vật
     public float acceleration = 0.5f; // Tốc độ gia tăng
+    /**
+    * Tốc độ Scroll
+    */
+    private float scrollSpeed = 2f;
+    /**
+    */
+    private float scrollSeconds;
+    private float arcSeconds;
 
     private float currentSpeed; // Tốc độ hiện tại của chướng ngại vật
 
-    public GameObject Obstacles ; // Tham chiếu đến game object của chướng ngại vật
-
+    public GameObject Obstacles; // Tham chiếu đến game object của chướng ngại vật
+    private GameObject middlegroundGlass, background;
+    private GameObject backgroundFactoryWall;
 
     /**
     * Khởi tạo 1 số giá trị toàn cục hay dùng.
@@ -131,13 +126,15 @@ public class LevelController : MonoBehaviour {
             //SpawnLaserBeam();
             //SpawnCayChup();
             
+            UpdateBackground();
+            ChangeArc();
         }
-            // Tăng tốc độ của chướng ngại vật dần dần
-            currentSpeed += acceleration * Time.deltaTime;
 
-            // Di chuyển chướng ngại vật theo tốc độ hiện tại
-            transform.Translate(Vector3.forward * currentSpeed * Time.deltaTime);
+        // Tăng tốc độ của chướng ngại vật dần dần
+        currentSpeed += acceleration * Time.deltaTime;
 
+        // Di chuyển chướng ngại vật theo tốc độ hiện tại
+        transform.Translate(Vector3.forward * currentSpeed * Time.deltaTime);
 
     
         // Xóa Chướng ngại vật sau khi ra khỏi Camera.
@@ -168,6 +165,90 @@ public class LevelController : MonoBehaviour {
 
     public void Stop() {
         this.state = State.STOPPED;
+    }
+
+    /* Spawn Arc */
+    private void PawnArc1()
+    {
+        // Chỉ spawn tên lửa ở arc 1
+        SpawnProjectiles();
+    }
+
+    private void PawnArc2()
+    {
+        // Spawn cả tên lửa và laser ở arc 2
+        SpawnProjectiles();
+        SpawnLaserBeam();
+    }
+
+    private void PawnArc3()
+    {
+        // Spawn tên lửa, laser và cây chụp ở arc 3
+        SpawnProjectiles();
+        SpawnLaserBeam3();
+        SpawnCayChup();
+    }
+
+    private void ChangeArc() {
+        arcSeconds += Time.deltaTime;
+
+        if (arcSeconds >= 15) {
+            GameObject[] objects = GameObject.FindGameObjectsWithTag("Background");
+            // Background ở vị trí phải nhất
+            GameObject background = objects[0];
+            
+            // Đợi tới Frame có Factory Bg
+            // if (!background.name.StartsWith("FactoryBackground")) {
+            //     return;
+            // }
+
+            // Chuyển scene
+            if (levelIndex == 3) {
+                // TODO Làm gì khi tới màn cuối.
+            } else {
+                SceneManager.LoadScene(++levelIndex, LoadSceneMode.Single);
+            }
+
+            arcSeconds = 0;
+        }
+    }
+
+    /* Scrolling Background */
+    private void UpdateBackground() {
+        scrollSeconds += Time.deltaTime;
+        
+        if (background != null) {
+            GameObject background = GameObject.FindGameObjectsWithTag("Background")[0];
+
+            // Cho tốc độ scroll của Outside là 1 khi Outside ở vị trí gốc tọa độ (chiếm toàn Camera).
+            if (background.name.StartsWith("Background")) {
+                MovingFloor scriptMovingFloor = background.GetComponent<MovingFloor>();
+
+                if (scriptMovingFloor.moveSpeed != 1f && background.transform.position.x >= 0f) {
+                    scriptMovingFloor.moveSpeed = 1f;
+                }
+            }
+        }
+
+        // Trình tự: Outside -> Factory Bg, lặp lại.
+        if (scrollSeconds >= 10) {
+            GameObject[] objects = GameObject.FindGameObjectsWithTag("Background");
+            // Background ở vị trí phải nhất
+            GameObject background = objects[objects.Length - 1];
+            MovingFloor scriptMovingFloor = background.GetComponent<MovingFloor>();
+            
+            if (background.name.StartsWith("Background")) {
+                scriptMovingFloor.floorPrefab = prefabFactoryWall;
+                // Cho tốc độ scroll của Factory Bg là 2. 
+                scriptMovingFloor.prefabMoveSpeed = 2f;
+            } else if (background.name.StartsWith("FactoryBackground")) {
+                scriptMovingFloor.floorPrefab = prefabBackground;
+                // Cho tốc độ scroll của Outside là 2 để đuổi kịp Bg Glass. 
+                scriptMovingFloor.prefabMoveSpeed = 2f;
+            }
+
+            scrollSeconds = 0;
+        }
     }
 
     /* Spawn Chướng ngại vật */

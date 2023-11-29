@@ -145,5 +145,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floor: {fileID: 7017318119537548574}
   floorPrefab: {fileID: 5131083196450190560}
-  moveSpeed: 0
+  moveSpeed: 2
   state: 0

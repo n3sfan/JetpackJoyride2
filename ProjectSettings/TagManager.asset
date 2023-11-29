@@ -8,6 +8,7 @@ TagManager:
   - Robot
   - Audio
   - Timer
+  - Background
   layers:
   - Default
   - TransparentFX

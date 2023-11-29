@@ -12,22 +12,34 @@ public class MovingFloor : MonoBehaviour
     public Transform floor;
     public GameObject floorPrefab; 
 
+    public bool canMove = true;
     /**
     * Di chuyển lùi
     */
-    public float moveSpeed;
+    public float moveSpeed, prefabMoveSpeed;
     public State state;
 
     // Start is called before the first frame update
     void Start()
     {
-        moveSpeed = 2f;
         state = State.INITIAL;
+        floor = this.gameObject.transform;
+
+        if (canMove && moveSpeed == 0f) {
+            moveSpeed = 2f;
+        }
+        if (prefabMoveSpeed == 0f) {
+            prefabMoveSpeed = moveSpeed;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!canMove) {
+            return;
+        }
+
         GameObject controller = GameObject.FindWithTag("GameController");
         if (controller.GetComponent<LevelController>().state == LevelController.State.STOPPED) {
             return;
@@ -40,9 +52,12 @@ public class MovingFloor : MonoBehaviour
         // Not x <= 0 for glitch
         if (this.state == State.INITIAL && x < 0f) {
             //Instantiate(floorPrefab, new Vector3(LevelController.WIDTH / 2, -LevelController.HEIGHT / 2 + LevelController.FLOOR_HEIGHT / 2, 0), Quaternion.identity);
-            Instantiate(floorPrefab, new Vector3(LevelController.WIDTH, floor.position.y, 0), Quaternion.identity);
+            GameObject gameObject = Instantiate(floorPrefab, new Vector3(LevelController.WIDTH, floor.position.y, 0), Quaternion.identity);
+            gameObject.GetComponent<MovingFloor>().moveSpeed = prefabMoveSpeed;
+
             this.state = State.PAST_ONE_HALF;
         } else if (this.state == State.PAST_ONE_HALF && x <= -LevelController.WIDTH) {
+            // Destroy this GameObject to which Script is attached
             this.state = State.INVISIBLE;
             Destroy(gameObject);
         }

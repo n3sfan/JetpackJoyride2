@@ -236,7 +236,7 @@ MonoBehaviour:
   - {fileID: 642908697}
   - {fileID: 1319859449}
   life: 3
-  gameOverUI: {fileID: 0}
+  gameOverUI: {fileID: 7822442221415779378, guid: 334441d4e98b79d469681f6343308fb7, type: 3}
 --- !u!95 &53773618
 Animator:
   serializedVersion: 5
@@ -1298,7 +1298,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floor: {fileID: 1652931263}
   floorPrefab: {fileID: 1652931260}
+  canMove: 1
   moveSpeed: 0
+  prefabMoveSpeed: 0
   state: 0
 --- !u!212 &1652931262
 SpriteRenderer:
@@ -1608,6 +1610,8 @@ MonoBehaviour:
   prefabLaserBall: {fileID: 7244188966110358785, guid: 258f739160f03554ab203d36df12eace, type: 3}
   prefabLaser: {fileID: 7318730806322644533, guid: a5da549ffe0ed504185bebf8a8dec174, type: 3}
   prefabLaserBeam: {fileID: 1819899742503224579, guid: 3014ff15940dfbe49b20c4b43e568c2b, type: 3}
+  prefabFactoryWall: {fileID: 0}
+  prefabBackground: {fileID: 0}
   state: 0
   initialSpeed: 5
   acceleration: 0.5
