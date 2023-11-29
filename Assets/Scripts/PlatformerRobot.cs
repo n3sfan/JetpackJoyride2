@@ -115,7 +115,6 @@ public class PlatformerRobot : MonoBehaviour
             }
             if (life < 1)
             {   
-                gameOverUI.SetActive(true);
                 this.gameObject.GetComponent<Animator>().enabled = false;
 
                 GameObject controller = GameObject.FindWithTag("GameController");
@@ -124,6 +123,8 @@ public class PlatformerRobot : MonoBehaviour
                 audioManager.PlaySFX(audioManager.dieSoundClip);
                 Destroy(gameObject);
                 audioManager.musicAudioSource.Stop();
+                
+                gameOverUI.SetActive(true);
             }
             
         }
