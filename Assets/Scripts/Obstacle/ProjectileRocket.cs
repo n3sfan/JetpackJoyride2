@@ -25,6 +25,7 @@ namespace Obstacle {
 
         // Chiều rộng tên lửa (theo trục x)
         float rocketWidth = 1.5f;
+        private float rotateSeconds;
 
         // Start is called before the first frame update
         void Start() {
@@ -46,20 +47,34 @@ namespace Obstacle {
 
             // Rotate rocket
             seconds += Time.deltaTime;
+            rotateSeconds += Time.deltaTime;
+
+            float rocketRotationSeconds = 0.5f;
 
             // Sau 0.5s, quay tên lửa lên hoặc xuống (tùy theo lần trước)
             // TODO Smooth rotation
             if (seconds >= 0.1f) {
+                float angle = 10f;
+
                 if (rotateUp) {
                     // Neu ten lua da quay len, bay gio quay xuong
-                    transform.localEulerAngles = new Vector3(0, 0, -5f);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(new Vector3(0, 0, -angle)), 1 / rocketRotationSeconds * rotateSeconds);
                 } else {
                     // Nguoc lai
-                    transform.localEulerAngles = new Vector3(0, 0, 5f);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(new Vector3(0, 0, angle)), 1 / rocketRotationSeconds * rotateSeconds);
+                }
+
+                if (rotateSeconds >= rocketRotationSeconds) {
+                    rotateSeconds = 0f;
                 }
 
                 // Lần tiếp tên lửa sẽ quay ngược hướng với lúc này
-                rotateUp = !rotateUp;
+                if (!rotateUp && Mathf.DeltaAngle(transform.localEulerAngles.z, angle) >= 0f) {
+                    rotateUp = true;
+                } else if (rotateUp && Mathf.DeltaAngle(transform.localEulerAngles.z, -angle) <= 0f) {
+                    rotateUp = false;
+                }
+
                 seconds = 0f;
             }
 

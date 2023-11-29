@@ -198,9 +198,9 @@ public class LevelController : MonoBehaviour {
             GameObject background = objects[0];
             
             // Đợi tới Frame có Factory Bg
-            // if (!background.name.StartsWith("FactoryBackground")) {
-            //     return;
-            // }
+            if (!background.name.StartsWith("FactoryBackground")) {
+                return;
+            }
 
             // Chuyển scene
             if (levelIndex == 3) {

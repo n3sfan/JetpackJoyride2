@@ -7,8 +7,8 @@ using UnityEngine;
 public class PlatformerRobot : MonoBehaviour
 {
     public static float ROBOT_HEIGHT = 1.5f;
-    public static float MIN_JUMP_FORCE = 0.1f;
-    public static float MAX_JUMP_FORCE = 0.2f;
+    public static float MIN_JUMP_FORCE = 0.04f;
+    public static float MAX_JUMP_FORCE = 0.08f;
     private static float[] POWER_LEVEL_JUMP_FORCES = { 0.05f, 0.07f, 0.09f, 0.1f, 0.15f, 0.25f};
 
     // Thời gian bật jetpack
@@ -52,7 +52,7 @@ public class PlatformerRobot : MonoBehaviour
         // Giảm lực nhảy
         // Lực nhảy dựa trên jetpack đã bật hết công suất chưa?
 
-        Debug.Log(jumpForce);
+        //Debug.Log(jumpForce);
 
         if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow)) {
             jumpIncreaseTime += Time.deltaTime;
@@ -120,7 +120,7 @@ public class PlatformerRobot : MonoBehaviour
 
                 GameObject controller = GameObject.FindWithTag("GameController");
                 controller.GetComponent<LevelController>().Stop();
-
+                
                 audioManager.PlaySFX(audioManager.dieSoundClip);
                 Destroy(gameObject);
                 audioManager.musicAudioSource.Stop();
