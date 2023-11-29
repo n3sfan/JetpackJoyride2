@@ -27,6 +27,11 @@ public class PlatformerRobot : MonoBehaviour
     
     private AudioManagerFactory audioManager;
 
+    // //jumpfire
+    // public ParticleSystem jumpFire;
+    // //Trang thai bay
+    // bool isJumping = false;
+
     void Awake()
     {
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManagerFactory>();
@@ -59,6 +64,8 @@ public class PlatformerRobot : MonoBehaviour
             body.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             jumpDecreaseTime = 0f;
             lastForceDecreasedTime = 0;
+
+            
         } else {
             jumpDecreaseTime += Time.deltaTime;
 
@@ -70,9 +77,31 @@ public class PlatformerRobot : MonoBehaviour
 
             jumpIncreaseTime = 0f;
             lastForceIncreasedTime = 0;
-        }
-    }
 
+        }
+
+
+        // Đức thêm phần lửa jumpfire
+
+        // if (transform.position.y < -2.6f)
+        // {
+        //     isJumping = false; // Nếu tọa độ thấp hơn -2.6, đặt isJumping thành false
+        // }
+
+        // if (isJumping)
+        // {
+        //     // Kích hoạt Particle System khi Robot đang bay
+        //     if (!jumpFire.isPlaying)
+        //     {
+        //         jumpFire.Play();
+        //     }
+        // }
+        // else
+        // {
+        //     // Tắt Particle System khi Robot không bay
+        //     jumpFire.Stop();
+        // }
+    }
 
     void OnTriggerEnter2D(Collider2D other) 
     {
@@ -97,4 +126,34 @@ public class PlatformerRobot : MonoBehaviour
             
         }
     }  
+
+    // void OnCollisionEnter2D(Collision2D collision)
+    // {
+    //     if (collision.gameObject.tag.Equals("Ground"))
+    //     {
+    //         // Code khi Robot chạm đất
+
+    //         isJumping = false; // Đặt lại trạng thái bay khi Robot chạm đất
+    //     }
+    // }
+
+    // void FixedUpdate()
+    // {
+    //     // Code kiểm tra Robot đang nhảy
+
+    //     if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow))
+    //     {
+    //         isJumping = true;
+    //         jumpIncreaseTime += Time.deltaTime;
+
+    //         if (jumpForce < MAX_JUMP_FORCE && jumpIncreaseTime - lastForceIncreasedTime >= 0.1f) {
+    //             jumpForce = Math.Min(MAX_JUMP_FORCE, jumpForce + (MAX_JUMP_FORCE - MIN_JUMP_FORCE) / 10);
+    //             lastForceIncreasedTime = jumpIncreaseTime;
+    //         }
+
+    //         body.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+    //         jumpDecreaseTime = 0f;
+    //         lastForceDecreasedTime = 0;
+    //     }
+    // }
 }
