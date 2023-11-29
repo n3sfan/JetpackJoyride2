@@ -13,18 +13,16 @@ public class Score : MonoBehaviour
     {
         if (!isPaused)
         {
-            timeValue += Time.deltaTime;
+            timeValue += Time.deltaTime * 2;
             DisplayTime(timeValue);
         }
     }
 
     void DisplayTime(float timeToDisplay)
     {
-        float minutes = Mathf.FloorToInt(timeToDisplay / 60);
-        float seconds = Mathf.FloorToInt(timeToDisplay % 60);
-        float milliseconds = timeToDisplay % 1 * 100;
+        float scores = Mathf.FloorToInt(timeToDisplay % 10000000);
 
-        timerText.text = string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, milliseconds);
+        timerText.text = string.Format("{0:000000000}", scores);
     }
     public void PauseTimer()
     {
