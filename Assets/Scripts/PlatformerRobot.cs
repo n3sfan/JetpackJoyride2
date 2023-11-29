@@ -16,7 +16,7 @@ public class PlatformerRobot : MonoBehaviour
     private float lastForceIncreasedTime = 0f;
     private float jumpDecreaseTime = 0f;
     private float lastForceDecreasedTime = 0f;
-    private float jumpForce = 0.04f;
+    private float jumpForce = MIN_JUMP_FORCE;
 
     private Rigidbody2D body;
 
@@ -52,6 +52,8 @@ public class PlatformerRobot : MonoBehaviour
         // Giảm lực nhảy
         // Lực nhảy dựa trên jetpack đã bật hết công suất chưa?
 
+        Debug.Log(jumpForce);
+
         if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow)) {
             jumpIncreaseTime += Time.deltaTime;
 
@@ -70,7 +72,7 @@ public class PlatformerRobot : MonoBehaviour
             jumpDecreaseTime += Time.deltaTime;
 
             if (jumpForce > MIN_JUMP_FORCE && jumpDecreaseTime - lastForceDecreasedTime >= 1.0f / 25) {
-                float multiple = (jumpDecreaseTime - lastForceDecreasedTime) / 0.1f;
+                float multiple = (jumpDecreaseTime - lastForceDecreasedTime) / (1.0f / 25);
                 jumpForce = Math.Max(MIN_JUMP_FORCE, jumpForce - multiple * (MAX_JUMP_FORCE - MIN_JUMP_FORCE) / 25);
                 lastForceDecreasedTime = jumpDecreaseTime;
             }
