@@ -263,8 +263,14 @@ public class LevelController : MonoBehaviour {
         // Khởi tạo Tên lửa
         GameObject rocket = Instantiate(prefabRocket);
         float x = WIDTH / 2 + 25;
+        GameObject robot = GameObject.FindGameObjectWithTag("Robot");
+        float y = robot.transform.position.y;
+        float y1 = y - 1f;
+        if (y1 < -2f) y1 = -2f;
+        float y2 = y + 1f;
+        if (y2 > 4.5f) y2 = 4.5f;
         // Set vị trí
-        rocket.transform.position = new Vector3(x, Random.Range(-2f, 4.5f), 0);
+        rocket.transform.position = new Vector3(x, Random.Range(y1, y2), 0);
         // Phần thừa, đừng để ý
         ProjectileRocket script = rocket.GetComponent<ProjectileRocket>();
         script.moveUpwards = Random.Range(0, 2) == 0;

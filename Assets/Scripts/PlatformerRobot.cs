@@ -17,6 +17,8 @@ public class PlatformerRobot : MonoBehaviour
     private float jumpDecreaseTime = 0f;
     private float lastForceDecreasedTime = 0f;
     private float jumpForce = MIN_JUMP_FORCE;
+    [SerializeField]
+    private GameObject robotChopChop;
 
     private Rigidbody2D body;
 
@@ -43,6 +45,7 @@ public class PlatformerRobot : MonoBehaviour
         life = hearts.Length;
         body = GetComponent<Rigidbody2D>();
         gameOverUI.SetActive(false);
+        robotChopChop.SetActive(false);
     }
 
     // Update is called once per frame
@@ -108,6 +111,9 @@ public class PlatformerRobot : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other) 
     {
         if (other.gameObject.tag.Equals("Obstacle")) {
+            Invoke("EnableBlink", 0f);
+            Invoke("DisableBlink", 0.2f);
+
             if (life >= 1)
             {
                 life -= 1;
@@ -129,6 +135,14 @@ public class PlatformerRobot : MonoBehaviour
             
         }
     }  
+
+    private void EnableBlink() {
+        robotChopChop.SetActive(true);
+    }
+
+    private void DisableBlink() {
+        robotChopChop.SetActive(false);
+    }
 
     // void OnCollisionEnter2D(Collision2D collision)
     // {
