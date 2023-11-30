@@ -8,10 +8,10 @@ public class PlatformerRobot : MonoBehaviour
 {
     public static float ROBOT_HEIGHT = 1.5f;
     /**
-    * Lực nhảy > Trọng lượng Robot, tỉ lệ với tốc độ màn chơi   
+    * Lực nhảy > Trọng lượng Robot
     */
-    public static float MIN_JUMP_FORCE = 14f;
-    public static float MAX_JUMP_FORCE = 15.5f;
+    public static float MIN_JUMP_FORCE = 19f;
+    public static float MAX_JUMP_FORCE = 20.5f;
     private static float[] POWER_LEVEL_JUMP_FORCES = { 0.05f, 0.07f, 0.09f, 0.1f, 0.15f, 0.25f};
 
     // Thời gian bật jetpack
