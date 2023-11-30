@@ -13,6 +13,8 @@ public class AudioManagerFactory : MonoBehaviour
 
     public AudioClip arcMusicClip;
     public AudioClip dieSoundClip;
+    public AudioClip brokenEngineClip;
+    public AudioClip electricShockClip;
 
     void Start()
     {
