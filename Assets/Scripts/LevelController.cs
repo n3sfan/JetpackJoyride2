@@ -112,7 +112,7 @@ public class LevelController : MonoBehaviour {
             if (SceneManager.GetActiveScene().name == "LevelFactory")
             {
                 PawnArc3();
-                currentSpeed += accelerationArc3 * Time.deltaTime;
+                //currentSpeed += accelerationArc3 * Time.deltaTime;
             }
             else if (SceneManager.GetActiveScene().name == "LevelOutside")
             {
@@ -131,11 +131,10 @@ public class LevelController : MonoBehaviour {
         }
 
         // Tăng tốc độ của chướng ngại vật dần dần
-        currentSpeed += acceleration * Time.deltaTime;
+        //currentSpeed += acceleration * Time.deltaTime;
 
         // Di chuyển chướng ngại vật theo tốc độ hiện tại
-        transform.Translate(Vector3.forward * currentSpeed * Time.deltaTime);
-
+        //transform.Translate(Vector3.forward * currentSpeed * Time.deltaTime);
     
         // Xóa Chướng ngại vật sau khi ra khỏi Camera.
         for (int i = this.activeObstacles.Count - 1; i >= 0; --i) {
@@ -192,7 +191,7 @@ public class LevelController : MonoBehaviour {
     private void ChangeArc() {
         arcSeconds += Time.deltaTime;
 
-        if (arcSeconds >= 15) {
+        if (arcSeconds >= 1000) {
             GameObject[] objects = GameObject.FindGameObjectsWithTag("Background");
             // Background ở vị trí phải nhất
             GameObject background = objects[0];

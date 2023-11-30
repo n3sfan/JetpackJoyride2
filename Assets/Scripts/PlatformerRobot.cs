@@ -7,8 +7,11 @@ using UnityEngine;
 public class PlatformerRobot : MonoBehaviour
 {
     public static float ROBOT_HEIGHT = 1.5f;
-    public static float MIN_JUMP_FORCE = 0.04f;
-    public static float MAX_JUMP_FORCE = 0.08f;
+    /**
+    * Lực nhảy > Trọng lượng Robot, tỉ lệ với tốc độ màn chơi   
+    */
+    public static float MIN_JUMP_FORCE = 14f;
+    public static float MAX_JUMP_FORCE = 15.5f;
     private static float[] POWER_LEVEL_JUMP_FORCES = { 0.05f, 0.07f, 0.09f, 0.1f, 0.15f, 0.25f};
 
     // Thời gian bật jetpack
@@ -49,30 +52,36 @@ public class PlatformerRobot : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         // Tăng lực nhảy: 0.006 N / 0.1s
         // Giảm lực nhảy
         // Lực nhảy dựa trên jetpack đã bật hết công suất chưa?
 
-        //Debug.Log(jumpForce);
+        Debug.Log("Jump force: " + jumpForce);
 
         if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow)) {
-            jumpIncreaseTime += Time.deltaTime;
+            jumpIncreaseTime += Time.fixedDeltaTime;
 
             if (jumpForce < MAX_JUMP_FORCE && jumpIncreaseTime - lastForceIncreasedTime >= 0.1f) {
                 float multiple = (jumpIncreaseTime - lastForceIncreasedTime) / 0.1f;
+                
+            Debug.Log("Multiple: " + multiple);
                 jumpForce = Math.Min(MAX_JUMP_FORCE, jumpForce + multiple * (MAX_JUMP_FORCE - MIN_JUMP_FORCE) / 10);
                 lastForceIncreasedTime = jumpIncreaseTime;
             }
 
-            body.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+           // Debug.Log("Time: " + (jumpIncreaseTime - lastForceDecreasedTime));
+            //body.AddForce(new Vector3(0, 0, jumpForce), ForceMode2D.Impulse);
+            if (body.velocity.y < 0) {
+                // Vận tốc tăng 0.1 m / 0.1 s
+                body.AddForce(new Vector2(0, MIN_JUMP_FORCE), ForceMode2D.Force);
+            }
+            body.AddForce(new Vector2(0, jumpForce), ForceMode2D.Force);
             jumpDecreaseTime = 0f;
             lastForceDecreasedTime = 0;
-
-            
         } else {
-            jumpDecreaseTime += Time.deltaTime;
+            jumpDecreaseTime += Time.fixedDeltaTime;
 
             if (jumpForce > MIN_JUMP_FORCE && jumpDecreaseTime - lastForceDecreasedTime >= 1.0f / 25) {
                 float multiple = (jumpDecreaseTime - lastForceDecreasedTime) / (1.0f / 25);
@@ -161,7 +170,7 @@ public class PlatformerRobot : MonoBehaviour
     //     if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow))
     //     {
     //         isJumping = true;
-    //         jumpIncreaseTime += Time.deltaTime;
+    //         jumpIncreaseTime += Time.fixedDeltaTime;
 
     //         if (jumpForce < MAX_JUMP_FORCE && jumpIncreaseTime - lastForceIncreasedTime >= 0.1f) {
     //             jumpForce = Math.Min(MAX_JUMP_FORCE, jumpForce + (MAX_JUMP_FORCE - MIN_JUMP_FORCE) / 10);
