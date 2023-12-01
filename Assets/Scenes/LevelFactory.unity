@@ -7654,7 +7654,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1067401232
 Transform:
   m_ObjectHideFlags: 0
@@ -8317,7 +8317,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 617, y: 468}
+  m_AnchoredPosition: {x: 633.45, y: 458}
   m_SizeDelta: {x: 653.11, y: 99.21}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1595165607
@@ -9142,7 +9142,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7659176303341295907, guid: 28fe9e4fb1fb6884db1fd07a852ad7fd, type: 3}
       propertyPath: m_Size.y
-      value: 0.5535067
+      value: 0.63132185
       objectReference: {fileID: 0}
     - target: {fileID: 7659176303341295907, guid: 28fe9e4fb1fb6884db1fd07a852ad7fd, type: 3}
       propertyPath: m_Offset.x
@@ -9150,7 +9150,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7659176303341295907, guid: 28fe9e4fb1fb6884db1fd07a852ad7fd, type: 3}
       propertyPath: m_Offset.y
-      value: -0.05149009
+      value: -0.012582511
       objectReference: {fileID: 0}
     - target: {fileID: 7659176303341295907, guid: 28fe9e4fb1fb6884db1fd07a852ad7fd, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.x
