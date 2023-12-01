@@ -40,6 +40,7 @@ public class PlatformerRobot : MonoBehaviour
     void Awake()
     {
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManagerFactory>();
+        robotChopChop.SetActive(false);
     }
 
     // Start is called before the first frame update
