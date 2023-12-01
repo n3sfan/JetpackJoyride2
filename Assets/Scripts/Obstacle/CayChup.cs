@@ -12,7 +12,7 @@ namespace Obstacle {
     */
     public class CayChup : ObstacleBase {
         // Di chuyển lùi
-        private float speed = 12f;
+        public static float SPEED = 2f * LevelController.SPEED_MULTIPLIER;
         // TODO: Xem lai bien nay nen su dung cho ten lua nhu the nao?
         public bool moveUpwards;
         public GameObject prefabAlertRocket;
@@ -49,9 +49,9 @@ namespace Obstacle {
 
             // Di chuyen toi
             Transform transform = this.gameObject.transform;
-            if (transform.position.x > robot.transform.position.x) speed *= -1;
+            if (transform.position.x > robot.transform.position.x) SPEED *= -1;
 
-            Vector3 movement = new Vector3(speed, y, 0);
+            Vector3 movement = new Vector3(SPEED, y, 0);
             transform.Translate(movement * Time.deltaTime);
 
             // Rotate rocket

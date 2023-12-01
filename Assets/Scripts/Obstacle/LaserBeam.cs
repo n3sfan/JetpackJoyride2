@@ -11,7 +11,7 @@ namespace Obstacle {
         public static float LASER_WIDTH = 2.56f, LASER_HEIGHT = 0.32f;
 
         // Di chuyển lùi
-        private float speed = 2f;
+        public static float SPEED = 2f * LevelController.SPEED_MULTIPLIER;
         // Những biến chưa được sử dụng
         private GameObject ball1, ball2, laser;
         private float seconds;
@@ -25,7 +25,7 @@ namespace Obstacle {
         void Update() {
             Transform transform = this.gameObject.transform;
 
-            Vector3 movement = new Vector3(-speed, 0, 0);
+            Vector3 movement = new Vector3(-SPEED, 0, 0);
             transform.Translate(movement * Time.deltaTime, Space.World);
         }
     }

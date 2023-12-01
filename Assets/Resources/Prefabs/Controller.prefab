@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &645491271347827834
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8222259059486634714}
+  - component: {fileID: 4202752763311452362}
+  m_Layer: 0
+  m_Name: Controller
+  m_TagString: GameController
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8222259059486634714
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 645491271347827834}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.593613, y: -0.497544, z: -0.14208803}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4202752763311452362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 645491271347827834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd673f77db0f2f545858bc3df2aa9bad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  floor: {fileID: 5131083196450190560, guid: 28fe9e4fb1fb6884db1fd07a852ad7fd, type: 3}
+  prefabRocket: {fileID: 1305597604340209002, guid: 43130bf65466f204cbed639a468bad07, type: 3}
+  prefabCayChup: {fileID: 5598648577125067886, guid: dabb07df441059048aad411b56d46d87, type: 3}
+  prefabLaserBall: {fileID: 7244188966110358785, guid: 258f739160f03554ab203d36df12eace, type: 3}
+  prefabLaser: {fileID: 7318730806322644533, guid: a5da549ffe0ed504185bebf8a8dec174, type: 3}
+  prefabLaserBeam: {fileID: 1819899742503224579, guid: 3014ff15940dfbe49b20c4b43e568c2b, type: 3}
+  prefabFactoryWall: {fileID: 3327667920451030955, guid: 3839f87b994e9d947a6e17e87a7a86ba, type: 3}
+  prefabBackground: {fileID: 7858660036282418366, guid: 74222f0527179744f8d45bfe5158b8fa, type: 3}
+  state: 0
+  initialSpeed: 5
+  acceleration: 0.5
+  Obstacles: {fileID: 0}

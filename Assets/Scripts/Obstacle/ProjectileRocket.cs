@@ -12,7 +12,7 @@ namespace Obstacle {
     */
     public class ProjectileRocket : ObstacleBase {
         // Di chuyển lùi
-        private float speed = 12f;
+        public static float SPEED = 6f * LevelController.SPEED_MULTIPLIER;
         // TODO: Xem lai bien nay nen su dung cho ten lua nhu the nao?
         public bool moveUpwards;
         public GameObject prefabAlertRocket;
@@ -42,14 +42,15 @@ namespace Obstacle {
 
             // Di chuyen lui
             Transform transform = this.gameObject.transform;
-            Vector3 movement = new Vector3(-speed, y, 0);
+            Vector3 movement = new Vector3(-SPEED, y, 0);
             transform.Translate(movement * Time.deltaTime);
 
             // Rotate rocket
             seconds += Time.deltaTime;
             rotateSeconds += Time.deltaTime;
 
-            float rocketRotationSeconds = 0.5f;
+            // Thời gian tên lửa quay lên hoặc xuống
+            float rocketRotationSeconds = 0.1f / LevelController.SPEED_MULTIPLIER;
 
             // Sau 0.5s, quay tên lửa lên hoặc xuống (tùy theo lần trước)
             // TODO Smooth rotation

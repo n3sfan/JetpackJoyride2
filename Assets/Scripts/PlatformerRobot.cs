@@ -10,8 +10,8 @@ public class PlatformerRobot : MonoBehaviour
     /**
     * Lực nhảy > Trọng lượng Robot
     */
-    public static float MIN_JUMP_FORCE = 19f;
-    public static float MAX_JUMP_FORCE = 20.5f;
+    public static float MIN_JUMP_FORCE = 48f;
+    public static float MAX_JUMP_FORCE = 49.5f;
     private static float[] POWER_LEVEL_JUMP_FORCES = { 0.05f, 0.07f, 0.09f, 0.1f, 0.15f, 0.25f};
 
     // Thời gian bật jetpack
@@ -55,19 +55,12 @@ public class PlatformerRobot : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        // Tăng lực nhảy: 0.006 N / 0.1s
-        // Giảm lực nhảy
-        // Lực nhảy dựa trên jetpack đã bật hết công suất chưa?
-
-        Debug.Log("Jump force: " + jumpForce);
-
         if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow)) {
             jumpIncreaseTime += Time.fixedDeltaTime;
 
             if (jumpForce < MAX_JUMP_FORCE && jumpIncreaseTime - lastForceIncreasedTime >= 0.1f) {
                 float multiple = (jumpIncreaseTime - lastForceIncreasedTime) / 0.1f;
                 
-            Debug.Log("Multiple: " + multiple);
                 jumpForce = Math.Min(MAX_JUMP_FORCE, jumpForce + multiple * (MAX_JUMP_FORCE - MIN_JUMP_FORCE) / 10);
                 lastForceIncreasedTime = jumpIncreaseTime;
             }

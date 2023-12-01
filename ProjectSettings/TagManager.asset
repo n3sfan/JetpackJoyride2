@@ -9,6 +9,7 @@ TagManager:
   - Audio
   - Timer
   - Background
+  - Menu
   layers:
   - Default
   - TransparentFX

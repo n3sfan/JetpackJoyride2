@@ -5,6 +5,7 @@ using UnityEngine;
 using Obstacle;
 using Unity.VisualScripting;
 using UnityEngine.SceneManagement;
+using UnityEngine.Assertions;
 
 
 public class LevelController : MonoBehaviour {
@@ -26,6 +27,7 @@ public class LevelController : MonoBehaviour {
     * Tọa độ min, max y nằm trong vùng chơi (trừ sàn + trần)
     */
     public static float MIN_PLAY_Y, MAX_PLAY_Y;
+    public static float SPEED_MULTIPLIER = 2f;
 
     [SerializeField]
     private GameObject floor;
@@ -70,12 +72,13 @@ public class LevelController : MonoBehaviour {
     /**
     */
     private float scrollSeconds;
-    private float arcSeconds;
+    private string nextBackgroundPrefabName = null;
+    private float arcPlaySeconds;
 
     private float currentSpeed; // Tốc độ hiện tại của chướng ngại vật
 
     public GameObject Obstacles; // Tham chiếu đến game object của chướng ngại vật
-    private GameObject middlegroundGlass, background;
+    private GameObject middlegroundGlass, firstBackground;
     private GameObject backgroundFactoryWall;
 
     /**
@@ -96,13 +99,19 @@ public class LevelController : MonoBehaviour {
 
         MIN_PLAY_Y = MIN_Y + FLOOR_HEIGHT;
         MAX_PLAY_Y = MAX_Y - CEILING_HEIGHT;
+
+        SceneManager.sceneLoaded += PostSceneLoad;
     }
    
-
     private void Start()
     {
         this.activeObstacles = new List<GameObject>();
         currentSpeed = initialSpeed;       
+
+        // Các GameObject ko được destroy khi chuyển scene.
+        DontDestroyOnLoad(GameObject.FindWithTag("Menu"));
+        DontDestroyOnLoad(GameObject.FindWithTag("Robot"));
+        DontDestroyOnLoad(this.gameObject);
     }
 
     private void Update()
@@ -111,16 +120,16 @@ public class LevelController : MonoBehaviour {
             // Gọi hàm pawn tương ứng cho mỗi arc khi trò chơi bắt đầu
             if (SceneManager.GetActiveScene().name == "LevelFactory")
             {
-                PawnArc3();
+                SpawnArc1();
                 //currentSpeed += accelerationArc3 * Time.deltaTime;
             }
             else if (SceneManager.GetActiveScene().name == "LevelOutside")
             {
-                PawnArc2();
+                SpawnArc2();
             }
             else if (SceneManager.GetActiveScene().name == "LevelEnd")
             {
-                PawnArc3();
+                SpawnArc3();
             }
             //SpawnProjectiles();
             //SpawnLaserBeam();
@@ -167,20 +176,20 @@ public class LevelController : MonoBehaviour {
     }
 
     /* Spawn Arc */
-    private void PawnArc1()
+    private void SpawnArc1()
     {
         // Chỉ spawn tên lửa ở arc 1
         SpawnProjectiles();
     }
 
-    private void PawnArc2()
+    private void SpawnArc2()
     {
         // Spawn cả tên lửa và laser ở arc 2
         SpawnProjectiles();
         SpawnLaserBeam();
     }
 
-    private void PawnArc3()
+    private void SpawnArc3()
     {
         // Spawn tên lửa, laser và cây chụp ở arc 3
         SpawnProjectiles();
@@ -188,18 +197,30 @@ public class LevelController : MonoBehaviour {
         SpawnCayChup();
     }
 
+    /* Scene Load */
     private void ChangeArc() {
-        arcSeconds += Time.deltaTime;
+        arcPlaySeconds += Time.deltaTime;
 
-        if (arcSeconds >= 1000) {
+        int arcTotalSeconds = 30;
+
+        if (arcPlaySeconds >= arcTotalSeconds) {
+            // Mảng này lúc này toàn FactoryWall
             GameObject[] objects = GameObject.FindGameObjectsWithTag("Background");
             // Background ở vị trí phải nhất
             GameObject background = objects[0];
             
             // Đợi tới Frame có Factory Bg
-            if (!background.name.StartsWith("FactoryBackground")) {
+            if (!background.name.StartsWith("FactoryWall")) {
                 return;
             }
+
+            this.state = State.CHANGING_SCENE;
+
+            // Giữ cho Scene sau
+            foreach (GameObject obj in objects) {
+                DontDestroyOnLoad(obj);
+            }
+            PreSceneLoad();
 
             // Chuyển scene
             if (levelIndex == 3) {
@@ -208,45 +229,110 @@ public class LevelController : MonoBehaviour {
                 SceneManager.LoadScene(++levelIndex, LoadSceneMode.Single);
             }
 
-            arcSeconds = 0;
+            arcPlaySeconds = 0;
         }
+    }
+
+    void PreSceneLoad() {
+        switch (levelIndex + 1) {
+            case 1:
+                prefabBackground = (GameObject) Resources.Load("Prefabs/Background/Factory");
+                break;
+            case 2:
+                prefabBackground = (GameObject) Resources.Load("Prefabs/Background/Ocean");
+                break;
+            case 3:
+                prefabBackground = (GameObject) Resources.Load("Prefabs/Background/End");
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+    * Các thiết lập khi chuyển Scene
+    */
+    void PostSceneLoad(Scene scene, LoadSceneMode mode) {
+        if (this.activeObstacles != null) {
+            this.activeObstacles.Clear();
+        }
+
+         // Setup các GameObject trong scene mới
+        GameObject.FindWithTag("Menu").GetComponent<Canvas>().worldCamera = Camera.main;
+
+        // Từng Arc có các setup riêng
+        switch (levelIndex) {
+            case 1:
+                SPEED_MULTIPLIER = 2;
+                break;
+            case 2:
+                SPEED_MULTIPLIER = 3;
+                break;
+            case 3:
+                SPEED_MULTIPLIER = 4;
+                break;
+            default:
+                break;
+        }
+
+        ProjectileRocket.SPEED = 6f * LevelController.SPEED_MULTIPLIER;
+        LaserBeam.SPEED = 2f * LevelController.SPEED_MULTIPLIER;
+        CayChup.SPEED = 2f * LevelController.SPEED_MULTIPLIER;
+
+        // Set background của Scene mới 
+        GameObject[] objects = GameObject.FindGameObjectsWithTag("Background");
+        // Background ở vị trí phải nhất
+        GameObject background = objects[objects.Length - 1];
+        MovingFloor scriptMovingFloor = background.GetComponent<MovingFloor>();
+        scriptMovingFloor.floorPrefab = prefabBackground;
     }
 
     /* Scrolling Background */
     private void UpdateBackground() {
-        scrollSeconds += Time.deltaTime;
-        
-        if (background != null) {
-            GameObject background = GameObject.FindGameObjectsWithTag("Background")[0];
+        firstBackground = GameObject.FindGameObjectsWithTag("Background")[0];
 
+        if (firstBackground != null) {
             // Cho tốc độ scroll của Outside là 1 khi Outside ở vị trí gốc tọa độ (chiếm toàn Camera).
-            if (background.name.StartsWith("Background")) {
-                MovingFloor scriptMovingFloor = background.GetComponent<MovingFloor>();
+            // Trước đó có thể > 1 nên chỉnh lại.
+            // if (firstBackground.name.StartsWith("Background")) {
+            //     MovingFloor scriptMovingFloor = firstBackground.GetComponent<MovingFloor>();
 
-                if (scriptMovingFloor.moveSpeed != 1f && background.transform.position.x >= 0f) {
-                    scriptMovingFloor.moveSpeed = 1f;
-                }
+            //     if (scriptMovingFloor.moveSpeed != 1f && firstBackground.transform.position.x >= 0f) {
+            //         scriptMovingFloor.moveSpeed = 1f;
+            //     }
+            // }
+
+            if (nextBackgroundPrefabName != null && !firstBackground.name.StartsWith(nextBackgroundPrefabName)) {
+                scrollSeconds = 0;
+            } else  {
+                nextBackgroundPrefabName = null;
+                scrollSeconds += Time.deltaTime;
             }
         }
 
+        Debug.Log(scrollSeconds + " " + nextBackgroundPrefabName + " " + firstBackground.name);
+        float changeBackgroundInterval = 10;
+
         // Trình tự: Outside -> Factory Bg, lặp lại.
-        if (scrollSeconds >= 10) {
+        if (scrollSeconds >= changeBackgroundInterval) {
             GameObject[] objects = GameObject.FindGameObjectsWithTag("Background");
             // Background ở vị trí phải nhất
             GameObject background = objects[objects.Length - 1];
             MovingFloor scriptMovingFloor = background.GetComponent<MovingFloor>();
-            
-            if (background.name.StartsWith("Background")) {
-                scriptMovingFloor.floorPrefab = prefabFactoryWall;
-                // Cho tốc độ scroll của Factory Bg là 2. 
-                scriptMovingFloor.prefabMoveSpeed = 2f;
-            } else if (background.name.StartsWith("FactoryBackground")) {
+
+            if (background.name.StartsWith("FactoryWall")) {
                 scriptMovingFloor.floorPrefab = prefabBackground;
                 // Cho tốc độ scroll của Outside là 2 để đuổi kịp Bg Glass. 
                 scriptMovingFloor.prefabMoveSpeed = 2f;
-            }
 
-            scrollSeconds = 0;
+                nextBackgroundPrefabName = prefabBackground.name;
+            } else {
+                scriptMovingFloor.floorPrefab = prefabFactoryWall;
+                // Cho tốc độ scroll của Factory Bg là 2. 
+                scriptMovingFloor.prefabMoveSpeed = 1.5f;
+
+                nextBackgroundPrefabName = prefabFactoryWall.name;
+            } 
         }
     }
 
@@ -307,7 +393,7 @@ public class LevelController : MonoBehaviour {
         laserSeconds += Time.deltaTime;
 
         // Sau Random(5, 8) giây mới spawn laser beam
-        if (laserSeconds < Random.Range(5, 8)) {
+        if (laserSeconds < Random.Range(10, 12)) {
             return;
         }
 
@@ -400,6 +486,7 @@ public class LevelController : MonoBehaviour {
     /* Trạng thái của Màn chơi */
     public enum State {
         PLAYING,
+        CHANGING_SCENE,
         STOPPED // Khi Robot va chạm với Obstacle 
     }
 }

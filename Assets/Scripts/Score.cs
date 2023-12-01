@@ -8,7 +8,7 @@ public class Score : MonoBehaviour
     private bool isPaused = false;
     public float timeValue = 0;
     public Text timerText;
-
+    
     void Update()
     {
         if (!isPaused)

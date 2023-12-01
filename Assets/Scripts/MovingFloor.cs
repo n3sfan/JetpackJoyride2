@@ -46,7 +46,7 @@ public class MovingFloor : MonoBehaviour
         }
 
         // Di chuyển lùi
-        float x = floor.position.x - moveSpeed * (Time.deltaTime);
+        float x = floor.position.x - moveSpeed * Time.deltaTime * LevelController.SPEED_MULTIPLIER;
         floor.position = new Vector3(x, floor.position.y, floor.position.z);
         
         // Not x <= 0 for glitch
