@@ -155,7 +155,7 @@ MonoBehaviour:
   musicAudioSource: {fileID: 1754135967}
   vfxAudioSource: {fileID: 1352415417}
   arcMusicClip: {fileID: 8300000, guid: 8571c15a8be35aa4fbe556e467e1b90f, type: 3}
-  dieSoundClip: {fileID: 8300000, guid: 4e04ab651a3ba1e4e94dbb2e8ab2feee, type: 3}
+  dieSoundClip: {fileID: 8300000, guid: fc65d50f75fcc8a41baeb346e399745b, type: 3}
   brokenEngineClip: {fileID: 8300000, guid: 5784d25169f22194bace9fd47dc5009b, type: 3}
   electricShockClip: {fileID: 8300000, guid: 4e04ab651a3ba1e4e94dbb2e8ab2feee, type: 3}
 --- !u!4 &64340508

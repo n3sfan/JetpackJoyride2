@@ -2124,7 +2124,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicAudioSource: {fileID: 1286902672}
   vfxAudioSource: {fileID: 1947602074}
-  arcMusicClip: {fileID: 8300000, guid: ad04b4a2b9263504e9d36cf4bdf7add0, type: 3}
+  arcMusicClip: {fileID: 8300000, guid: 525b212b994c52642b3cd24e02b7b113, type: 3}
   dieSoundClip: {fileID: 8300000, guid: fc65d50f75fcc8a41baeb346e399745b, type: 3}
   brokenEngineClip: {fileID: 8300000, guid: 5784d25169f22194bace9fd47dc5009b, type: 3}
   electricShockClip: {fileID: 8300000, guid: 4e04ab651a3ba1e4e94dbb2e8ab2feee, type: 3}
@@ -8665,6 +8665,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenuUI: {fileID: 421363188}
+  audioManager: {fileID: 0}
 --- !u!1 &1947602073
 GameObject:
   m_ObjectHideFlags: 0
