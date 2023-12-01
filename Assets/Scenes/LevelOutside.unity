@@ -1443,7 +1443,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floor: {fileID: 5131083196450190560, guid: 28fe9e4fb1fb6884db1fd07a852ad7fd, type: 3}
   prefabRocket: {fileID: 1305597604340209002, guid: 739931acdc6a95c4dafedb883fe76b79, type: 3}
-  prefabCayChup: {fileID: 5598648577125067886, guid: dabb07df441059048aad411b56d46d87, type: 3}
+  prefabCayChup: {fileID: 5598648577125067886, guid: c1ec60084e1094e4e89737e52ed22af4, type: 3}
   prefabLaserBall: {fileID: 7244188966110358785, guid: 5fb41db7a5e20a04da9972090a4a1823, type: 3}
   prefabLaser: {fileID: 7318730806322644533, guid: 4bb36acb3e4f4e9429040932fca9fe99, type: 3}
   prefabLaserBeam: {fileID: 1819899742503224579, guid: 3014ff15940dfbe49b20c4b43e568c2b, type: 3}
@@ -8152,7 +8152,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeValue: 0
+  score: 0
   timerText: {fileID: 1640228805}
+  highScoreText: {fileID: 0}
 --- !u!114 &1640228805
 MonoBehaviour:
   m_ObjectHideFlags: 0
