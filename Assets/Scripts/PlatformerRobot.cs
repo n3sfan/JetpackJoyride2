@@ -61,7 +61,7 @@ public class PlatformerRobot : MonoBehaviour
 
         Debug.Log("Jump force: " + jumpForce);
 
-        if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow)) {
+        if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.Return)) {
             jumpIncreaseTime += Time.fixedDeltaTime;
 
             if (jumpForce < MAX_JUMP_FORCE && jumpIncreaseTime - lastForceIncreasedTime >= 0.1f) {

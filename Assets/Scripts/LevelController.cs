@@ -122,9 +122,9 @@ public class LevelController : MonoBehaviour {
             {
                 PawnArc3();
             }
-            //SpawnProjectiles();
-            //SpawnLaserBeam();
-            //SpawnCayChup();
+            // SpawnProjectiles();
+            // SpawnLaserBeam();
+            // SpawnCayChup();
             
             UpdateBackground();
             ChangeArc();
@@ -178,6 +178,7 @@ public class LevelController : MonoBehaviour {
         // Spawn cả tên lửa và laser ở arc 2
         SpawnProjectiles();
         SpawnLaserBeam();
+        SpawnCayChup();
     }
 
     private void PawnArc3()
@@ -278,6 +279,33 @@ public class LevelController : MonoBehaviour {
 
         rocketSeconds = 0;
     }
+    private void SpawnProjectilesHard() {
+        rocketSeconds += Time.deltaTime;
+
+        // Sau 2 giây mới spawn 1 tên lửa
+        if (rocketSeconds < 2) {
+            return;
+        }
+
+        // Khởi tạo Tên lửa
+        GameObject rocket = Instantiate(prefabRocket);
+        float x = WIDTH / 2 + 25;
+        GameObject robot = GameObject.FindGameObjectWithTag("Robot");
+        float y = robot.transform.position.y;
+        float y1 = y - 1f;
+        if (y1 < -2f) y1 = -2f;
+        float y2 = y + 1f;
+        if (y2 > 4.5f) y2 = 4.5f;
+        // Set vị trí
+        rocket.transform.position = new Vector3(x, Random.Range(y1, y2), 0);
+        // Phần thừa, đừng để ý
+        ProjectileRocket script = rocket.GetComponent<ProjectileRocket>();
+        script.moveUpwards = Random.Range(0, 2) == 0;
+
+        this.activeObstacles.Add(rocket);
+
+        rocketSeconds = 0;
+    }
 
     private void SpawnCayChup() {
         cayChupSeconds += Time.deltaTime;
@@ -300,6 +328,26 @@ public class LevelController : MonoBehaviour {
         cayChupSeconds = 0;
     }
 
+    private void SpawnCayChupHard() {
+        cayChupSeconds += Time.deltaTime;
+
+        // Sau 3 giây mới spawn 1 tên lửa
+        if (cayChupSeconds < 3) {
+            return;
+        }
+
+        GameObject caychup = Instantiate(prefabCayChup);
+        float x = -WIDTH / 2 - 25;
+        // Set vị trí
+        caychup.transform.position = new Vector3(x, Random.Range(-2f, 4.5f), 0);
+        // Phần thừa, đừng để ý
+        // CayChup script = caychup.GetComponent<CayChup>();
+        // script.moveUpwards = Random.Range(0, 2) == 0;
+
+        this.activeObstacles.Add(caychup);
+
+        cayChupSeconds = 0;
+    }
     /**
     * Laser Beam = Ball 1, 2 + laser
     */
