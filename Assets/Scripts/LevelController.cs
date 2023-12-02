@@ -56,7 +56,7 @@ public class LevelController : MonoBehaviour {
     */
     public State state;
     private int levelIndex = 1;
-    private string[] levelNames = { "LevelFactory", "LevelOutside", "LevelEnd"};
+    private string[] levelNames = { "LevelFactory", "LevelSea", "LevelLava", "LevelForest", "LevelDesert", "LevelSnow", "LevelGalaxy"};
 
     /**
     * List chướng ngại vật còn nằm trong Camera.
@@ -123,17 +123,33 @@ public class LevelController : MonoBehaviour {
                 SpawnArc1();
                 //currentSpeed += accelerationArc3 * Time.deltaTime;
             }
-            else if (SceneManager.GetActiveScene().name == "LevelOutside")
+            else if (SceneManager.GetActiveScene().name == "LevelSea")
             {
                 SpawnArc2();
             }
-            else if (SceneManager.GetActiveScene().name == "LevelEnd")
+            else if (SceneManager.GetActiveScene().name == "LevelLava")
             {
                 SpawnArc3();
             }
-            //SpawnProjectiles();
-            //SpawnLaserBeam();
-            //SpawnCayChup();
+            else if (SceneManager.GetActiveScene().name == "LevelForest")
+            {
+                PawnArc4();
+            }
+            else if (SceneManager.GetActiveScene().name == "LevelDesert")
+            {
+                PawnArc5();
+            }
+            else if (SceneManager.GetActiveScene().name == "LevelSnow")
+            {
+                PawnArc6();
+            }
+            else if (SceneManager.GetActiveScene().name == "LevelGalaxy")
+            {
+                PawnArc7();
+            }
+            // SpawnProjectiles();
+            // SpawnLaserBeam();
+            // SpawnCayChup();
             
             UpdateBackground();
             ChangeArc();
@@ -171,6 +187,7 @@ public class LevelController : MonoBehaviour {
         }
     }
 
+
     public void Stop() {
         this.state = State.STOPPED;
     }
@@ -187,15 +204,46 @@ public class LevelController : MonoBehaviour {
         // Spawn cả tên lửa và laser ở arc 2
         SpawnProjectiles();
         SpawnLaserBeam();
+        SpawnCayChup();
     }
 
     private void SpawnArc3()
     {
         // Spawn tên lửa, laser và cây chụp ở arc 3
         SpawnProjectiles();
-        SpawnLaserBeam3();
+        SpawnLaserBeam();
         SpawnCayChup();
     }
+
+    private void PawnArc4()
+    {
+        // Spawn tên lửa mức medium
+        SpawnProjectilesHard();
+        SpawnLaserBeam();
+        SpawnCayChup();
+    }
+    private void PawnArc5()
+    {
+        // Spawn tên lửa, cây chụp mức medium
+        SpawnProjectilesHard();
+        SpawnLaserBeam();
+        SpawnCayChupMedium();
+    }
+    private void PawnArc6()
+    {
+        // Spawn cả 3 tên lửa, laser và cây chụp mức Medium
+        SpawnProjectilesHard();
+        SpawnLaserBeamMedium();
+        SpawnCayChupMedium();
+    }
+    private void PawnArc7()
+    {
+        // Spawn tên lửa, laser và cây chụp siêu khó
+        SpawnProjectilesHard();
+        SpawnLaserBeamHard();
+        SpawnCayChupHard();
+    }
+
 
     /* Scene Load */
     private void ChangeArc() {
@@ -364,6 +412,34 @@ public class LevelController : MonoBehaviour {
 
         rocketSeconds = 0;
     }
+    
+    private void SpawnProjectilesHard() {
+        rocketSeconds += Time.deltaTime;
+
+        // Sau 2 giây mới spawn 1 tên lửa
+        if (rocketSeconds < 2) {
+            return;
+        }
+
+        // Khởi tạo Tên lửa
+        GameObject rocket = Instantiate(prefabRocket);
+        float x = WIDTH / 2 + 25;
+        GameObject robot = GameObject.FindGameObjectWithTag("Robot");
+        float y = robot.transform.position.y;
+        float y1 = y - 1f;
+        if (y1 < -2f) y1 = -2f;
+        float y2 = y + 1f;
+        if (y2 > 4.5f) y2 = 4.5f;
+        // Set vị trí
+        rocket.transform.position = new Vector3(x, Random.Range(y1, y2), 0);
+        // Phần thừa, đừng để ý
+        ProjectileRocket script = rocket.GetComponent<ProjectileRocket>();
+        script.moveUpwards = Random.Range(0, 2) == 0;
+
+        this.activeObstacles.Add(rocket);
+
+        rocketSeconds = 0;
+    }
 
     private void SpawnCayChup() {
         cayChupSeconds += Time.deltaTime;
@@ -386,6 +462,47 @@ public class LevelController : MonoBehaviour {
         cayChupSeconds = 0;
     }
 
+    private void SpawnCayChupMedium() {
+        cayChupSeconds += Time.deltaTime;
+
+        // Sau 4 giây mới spawn 1 tên lửa
+        if (cayChupSeconds < 4) {
+            return;
+        }
+
+        GameObject caychup = Instantiate(prefabCayChup);
+        float x = -WIDTH / 2 - 25;
+        // Set vị trí
+        caychup.transform.position = new Vector3(x, Random.Range(-2f, 4.5f), 0);
+        // Phần thừa, đừng để ý
+        // CayChup script = caychup.GetComponent<CayChup>();
+        // script.moveUpwards = Random.Range(0, 2) == 0;
+
+        this.activeObstacles.Add(caychup);
+
+        cayChupSeconds = 0;
+    }
+
+    private void SpawnCayChupHard() {
+        cayChupSeconds += Time.deltaTime;
+
+        // Sau 3 giây mới spawn 1 tên lửa
+        if (cayChupSeconds < 3) {
+            return;
+        }
+
+        GameObject caychup = Instantiate(prefabCayChup);
+        float x = -WIDTH / 2 - 25;
+        // Set vị trí
+        caychup.transform.position = new Vector3(x, Random.Range(-2f, 4.5f), 0);
+        // Phần thừa, đừng để ý
+        // CayChup script = caychup.GetComponent<CayChup>();
+        // script.moveUpwards = Random.Range(0, 2) == 0;
+
+        this.activeObstacles.Add(caychup);
+
+        cayChupSeconds = 0;
+    }
     /**
     * Laser Beam = Ball 1, 2 + laser
     */
@@ -436,11 +553,57 @@ public class LevelController : MonoBehaviour {
         laserSeconds = 0;
     }
 
-    private void SpawnLaserBeam3() {
+    private void SpawnLaserBeamMedium() {
         laserSeconds += Time.deltaTime;
 
-        // Sau Random(5, 8) giây mới spawn laser beam
+        // Sau Random(4, 7) giây mới spawn laser beam
         if (laserSeconds < Random.Range(4, 7)) {
+            return;
+        }
+
+        float minLaserLength = 2f, maxLaserLength = 5f;
+        // Random khoảng cách giữa 2 ball
+        float distanceToCameraRegion = Random.Range(minLaserLength, maxLaserLength);
+
+        // Random tọa độ ball 1
+        Vector3 ballPos1 = new Vector3(MAX_X + distanceToCameraRegion, Random.Range(MIN_PLAY_Y + LaserBeam3.BALL_RADIUS, MAX_PLAY_Y - LaserBeam3.BALL_RADIUS));
+        Vector3 ballPos2;
+        Quaternion rotation;
+
+        // TODO Tìm ball 2, sao cho vị trí ball 2 nằm trong Camera.
+        rotation = Quaternion.AngleAxis(Random.Range(-180f, 180f), new Vector3(0, 0, 1));
+        // Tọa độ ball 2 = ballPos1 + vector (1, 0, 0) quay quanh trục z góc theta
+        ballPos2 = rotation * Vector3.right * (distanceToCameraRegion - LaserBeam3.BALL_RADIUS) + ballPos1;
+
+        // Frame này ko tìm thấy, để frame sau.
+        if (!(MIN_PLAY_Y + LaserBeam3.BALL_RADIUS + PlatformerRobot.ROBOT_HEIGHT <= ballPos2.y && ballPos2.y <= MAX_PLAY_Y - PlatformerRobot.ROBOT_HEIGHT)) {
+            return;
+        }
+
+        Vector3 laserPos = (ballPos1 + ballPos2) / 2;
+
+        // Khởi tạo ball 1, 2 và tia laser
+        GameObject ball1 = Instantiate(prefabLaserBall, ballPos1, Quaternion.identity);
+        GameObject ball2 = Instantiate(prefabLaserBall, ballPos2, Quaternion.identity);
+        GameObject laser = Instantiate(prefabLaser, laserPos, rotation);
+        laser.transform.localScale = new Vector3(Vector3.Distance(ballPos1, ballPos2) * (32f / 128f), laser.transform.localScale.y);
+
+        // Vị trí của 3 GameObject con (ball 1 + 2, laser) sẽ trở nên tương đối với GameObject parent (laserBeam).
+        // Tức là laserBeam làm gốc tọa độ của 3 GameObject con
+        GameObject laserBeam3 = Instantiate(prefabLaserBeam, laserPos, Quaternion.identity);
+        ball1.transform.parent = laserBeam3.transform;
+        ball2.transform.parent = laserBeam3.transform;
+        laser.transform.parent = laserBeam3.transform;
+
+        this.activeObstacles.Add(laserBeam3);
+
+        laserSeconds = 0;
+    }
+    private void SpawnLaserBeamHard() {
+        laserSeconds += Time.deltaTime;
+
+        // Sau Random(3, 6) giây mới spawn laser beam
+        if (laserSeconds < Random.Range(3, 6)) {
             return;
         }
 

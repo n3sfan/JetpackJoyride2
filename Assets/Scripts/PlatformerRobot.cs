@@ -125,6 +125,8 @@ public class PlatformerRobot : MonoBehaviour
             if (life < 1)
             {   
                 this.gameObject.GetComponent<Animator>().enabled = false;
+                GameObject score = GameObject.FindGameObjectWithTag("Timer");
+                score.GetComponent<Score>().PauseTimer();
 
                 GameObject controller = GameObject.FindWithTag("GameController");
                 controller.GetComponent<LevelController>().Stop();
