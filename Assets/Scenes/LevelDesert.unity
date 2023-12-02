@@ -540,24 +540,7 @@ MonoBehaviour:
   - {fileID: 1639789678}
   - {fileID: 350865082}
   - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  life: 20
+  life: 3
   gameOverUI: {fileID: 1728726126}
 --- !u!61 &64302314
 BoxCollider2D:
@@ -9389,10 +9372,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7429477814349479708, guid: 74222f0527179744f8d45bfe5158b8fa, type: 3}
-      propertyPath: m_SortingOrder
-      value: -30
-      objectReference: {fileID: 0}
     - target: {fileID: 7858660036282418366, guid: 74222f0527179744f8d45bfe5158b8fa, type: 3}
       propertyPath: m_Name
       value: Background
@@ -9460,7 +9439,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6642893201332508849, guid: 2be292b066814f24f9258f363aace3e1, type: 3}
       propertyPath: m_SortingOrder
-      value: -15
+      value: -19
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
