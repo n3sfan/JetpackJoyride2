@@ -42,7 +42,8 @@ public class Score : MonoBehaviour
     void DisplayTime(int score)
     {
         timerText.text = $"Score:{score}"; //string.Format("{0:000000000}", score);
-    } /*
+    } 
+    /*
     void DisplayTime(float timeToDisplay)
     {
         float scores = Mathf.FloorToInt(timeToDisplay % 10000000);
@@ -58,4 +59,5 @@ public class Score : MonoBehaviour
     {
         isPaused = false;
     }
+    
 }
