@@ -20,12 +20,13 @@ namespace Obstacle {
             this.ball1 = this.gameObject.transform.GetChild(0).gameObject;
             this.ball2 = this.gameObject.transform.GetChild(1).gameObject;
             this.laser = this.gameObject.transform.GetChild(2).gameObject;
+            this.speed = SPEED;
         }
 
         void Update() {
             Transform transform = this.gameObject.transform;
 
-            Vector3 movement = new Vector3(-SPEED, 0, 0);
+            Vector3 movement = new Vector3(-speed, 0, 0);
             transform.Translate(movement * Time.deltaTime, Space.World);
         }
     }

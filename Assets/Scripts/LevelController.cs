@@ -178,6 +178,7 @@ public class LevelController : MonoBehaviour {
 
             if (obstacle.name.StartsWith("CayChup")) {
                 if (obstacle.transform.position.x <= -WIDTH / 2 - 30) {
+                    Debug.Log("ok " + obstacle.name + " " + obstacle.transform.position.x);
                     Destroy(obstacle);
                     this.activeObstacles.RemoveAt(i);
                 }
@@ -256,7 +257,7 @@ public class LevelController : MonoBehaviour {
 
         arcPlaySeconds += Time.deltaTime;
 
-        int arcTotalSeconds = 5;
+        int arcTotalSeconds = 30;
 
         if (arcPlaySeconds >= arcTotalSeconds) {
             // Mảng này lúc này toàn FactoryWall
@@ -335,9 +336,9 @@ public class LevelController : MonoBehaviour {
                 break;
         }
 
-        ProjectileRocket.SPEED = 6f * LevelController.SPEED_MULTIPLIER;
-        LaserBeam.SPEED = 2f * LevelController.SPEED_MULTIPLIER;
-        CayChup.SPEED = 2f * LevelController.SPEED_MULTIPLIER;
+        ProjectileRocket.SPEED = 6f * SPEED_MULTIPLIER;
+        LaserBeam.SPEED = 2f * SPEED_MULTIPLIER;
+        CayChup.SPEED = 2f * SPEED_MULTIPLIER;
 
         // Set background của Scene mới 
         GameObject[] objects = GameObject.FindGameObjectsWithTag("Background");

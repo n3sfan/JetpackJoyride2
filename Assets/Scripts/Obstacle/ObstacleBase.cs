@@ -7,5 +7,9 @@ namespace Obstacle {
     * Mọi Chướng ngại vật phải extend class này, dễ quản lí.
     */
     public class ObstacleBase : MonoBehaviour {
+        public float speed {
+            get;
+            set;
+        }
     }
 }

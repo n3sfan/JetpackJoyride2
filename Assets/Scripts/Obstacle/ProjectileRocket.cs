@@ -34,6 +34,7 @@ namespace Obstacle {
             float x = LevelController.WIDTH / 2 - alertWidth;
             // Khởi tạo Cảnh báo
             alertRocket = Instantiate(prefabAlertRocket, new Vector3(x, this.gameObject.transform.position.y, 0), Quaternion.identity);
+            this.speed = SPEED;
         }
 
         // Update is called once per frame
@@ -42,7 +43,7 @@ namespace Obstacle {
 
             // Di chuyen lui
             Transform transform = this.gameObject.transform;
-            Vector3 movement = new Vector3(-SPEED, y, 0);
+            Vector3 movement = new Vector3(-speed, y, 0);
             transform.Translate(movement * Time.deltaTime);
 
             // Rotate rocket
@@ -50,7 +51,7 @@ namespace Obstacle {
             rotateSeconds += Time.deltaTime;
 
             // Thời gian tên lửa quay lên hoặc xuống
-            float rocketRotationSeconds = 0.1f / LevelController.SPEED_MULTIPLIER;
+            float rocketRotationSeconds = 1f / LevelController.SPEED_MULTIPLIER;
 
             // Sau 0.5s, quay tên lửa lên hoặc xuống (tùy theo lần trước)
             // TODO Smooth rotation

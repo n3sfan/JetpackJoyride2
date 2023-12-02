@@ -19,6 +19,7 @@ namespace Obstacle {
         private GameObject alertRocket;
         // Giây
         private float seconds;
+        private float speed;
         
         // Lần trước quay lên hay xuống?
         private bool rotateUp;
@@ -34,6 +35,7 @@ namespace Obstacle {
             // Khởi tạo Cảnh báo
             alertRocket = Instantiate(prefabAlertRocket, new Vector3(x, this.gameObject.transform.position.y, 0), Quaternion.identity);
             //alertRocket = Instantiate(prefabAlertRocket, new Vector3(0, 0, 0), Quaternion.identity);
+            this.speed = SPEED;
         }
 
         // Update is called once per frame
@@ -41,7 +43,7 @@ namespace Obstacle {
             float y = 0;
 
             GameObject robot = GameObject.FindGameObjectWithTag("Robot");
-        
+            
             // Robot die thì ko tiếp tục.
             if (robot == null) {
                 return;
@@ -49,9 +51,10 @@ namespace Obstacle {
 
             // Di chuyen toi
             Transform transform = this.gameObject.transform;
-            if (transform.position.x > robot.transform.position.x) SPEED *= -1;
+            if (transform.position.x > robot.transform.position.x) 
+                speed *= -1;
 
-            Vector3 movement = new Vector3(SPEED, y, 0);
+            Vector3 movement = new Vector3(speed, y, 0);
             transform.Translate(movement * Time.deltaTime);
 
             // Rotate rocket
