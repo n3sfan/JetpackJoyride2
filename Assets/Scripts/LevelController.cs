@@ -151,16 +151,18 @@ public class LevelController : MonoBehaviour {
             // SpawnLaserBeam();
             // SpawnCayChup();
             
-            UpdateBackground();
-            ChangeArc();
         }
+
+        UpdateBackground();
+        ChangeArc();
 
         // Tăng tốc độ của chướng ngại vật dần dần
         //currentSpeed += acceleration * Time.deltaTime;
 
         // Di chuyển chướng ngại vật theo tốc độ hiện tại
         //transform.Translate(Vector3.forward * currentSpeed * Time.deltaTime);
-    
+
+        // Không trong state PLAYING cũng có thể có obstacle.
         // Xóa Chướng ngại vật sau khi ra khỏi Camera.
         for (int i = this.activeObstacles.Count - 1; i >= 0; --i) {
             GameObject obstacle = this.activeObstacles[i];
@@ -247,9 +249,14 @@ public class LevelController : MonoBehaviour {
 
     /* Scene Load */
     private void ChangeArc() {
+        // Level max, tạm thời ko đổi nữa
+        if (levelIndex == 3) {
+            return;
+        }
+
         arcPlaySeconds += Time.deltaTime;
 
-        int arcTotalSeconds = 30;
+        int arcTotalSeconds = 5;
 
         if (arcPlaySeconds >= arcTotalSeconds) {
             // Mảng này lúc này toàn FactoryWall
@@ -263,6 +270,11 @@ public class LevelController : MonoBehaviour {
             }
 
             this.state = State.CHANGING_SCENE;
+
+            // Còn chướng ngại vật, ko chuyển.
+            if (this.activeObstacles.Count > 0) {
+                return;
+            }
 
             // Giữ cho Scene sau
             foreach (GameObject obj in objects) {
@@ -333,6 +345,8 @@ public class LevelController : MonoBehaviour {
         GameObject background = objects[objects.Length - 1];
         MovingFloor scriptMovingFloor = background.GetComponent<MovingFloor>();
         scriptMovingFloor.floorPrefab = prefabBackground;
+
+        this.state = State.PLAYING;
     }
 
     /* Scrolling Background */
@@ -358,7 +372,7 @@ public class LevelController : MonoBehaviour {
             }
         }
 
-        Debug.Log(scrollSeconds + " " + nextBackgroundPrefabName + " " + firstBackground.name);
+        //Debug.Log(scrollSeconds + " " + nextBackgroundPrefabName + " " + firstBackground.name);
         float changeBackgroundInterval = 10;
 
         // Trình tự: Outside -> Factory Bg, lặp lại.
@@ -369,11 +383,14 @@ public class LevelController : MonoBehaviour {
             MovingFloor scriptMovingFloor = background.GetComponent<MovingFloor>();
 
             if (background.name.StartsWith("FactoryWall")) {
-                scriptMovingFloor.floorPrefab = prefabBackground;
-                // Cho tốc độ scroll của Outside là 2 để đuổi kịp Bg Glass. 
-                scriptMovingFloor.prefabMoveSpeed = 2f;
+                // Đang chuyển scene thì ko đổi bg.
+                if (this.state == State.PLAYING) {
+                    scriptMovingFloor.floorPrefab = prefabBackground;
+                    // Cho tốc độ scroll của Outside là 2 để đuổi kịp Bg Glass. 
+                    scriptMovingFloor.prefabMoveSpeed = 1.5f;
 
-                nextBackgroundPrefabName = prefabBackground.name;
+                    nextBackgroundPrefabName = prefabBackground.name;
+                }
             } else {
                 scriptMovingFloor.floorPrefab = prefabFactoryWall;
                 // Cho tốc độ scroll của Factory Bg là 2. 

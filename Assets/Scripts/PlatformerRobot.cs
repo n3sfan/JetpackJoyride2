@@ -10,8 +10,8 @@ public class PlatformerRobot : MonoBehaviour
     /**
     * Lực nhảy > Trọng lượng Robot
     */
-    public static float MIN_JUMP_FORCE = 48f;
-    public static float MAX_JUMP_FORCE = 49.5f;
+    public static float MIN_JUMP_FORCE = 50f;
+    public static float MAX_JUMP_FORCE = 51.5f;
     private static float[] POWER_LEVEL_JUMP_FORCES = { 0.05f, 0.07f, 0.09f, 0.1f, 0.15f, 0.25f};
 
     // Thời gian bật jetpack
@@ -24,13 +24,11 @@ public class PlatformerRobot : MonoBehaviour
     private GameObject robotChopChop;
 
     private Rigidbody2D body;
-
+    
     public GameObject[] hearts;
     public int life;
 
     public GameObject gameOverUI;
-    
-    private AudioManagerFactory audioManager;
 
     // //jumpfire
     // public ParticleSystem jumpFire;
@@ -39,7 +37,7 @@ public class PlatformerRobot : MonoBehaviour
 
     void Awake()
     {
-        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManagerFactory>();
+        
         robotChopChop.SetActive(false);
     }
 
@@ -74,6 +72,8 @@ public class PlatformerRobot : MonoBehaviour
             body.AddForce(new Vector2(0, jumpForce), ForceMode2D.Force);
             jumpDecreaseTime = 0f;
             lastForceDecreasedTime = 0;
+
+            //onGround = false;
         } else {
             jumpDecreaseTime += Time.fixedDeltaTime;
 
@@ -122,8 +122,7 @@ public class PlatformerRobot : MonoBehaviour
                 life -= 1;
                 Destroy(hearts[life].gameObject);
             }
-            if (life < 1)
-            {   
+            if (life < 1) {
                 this.gameObject.GetComponent<Animator>().enabled = false;
                 GameObject score = GameObject.FindGameObjectWithTag("Timer");
                 score.GetComponent<Score>().PauseTimer();
@@ -131,8 +130,8 @@ public class PlatformerRobot : MonoBehaviour
                 GameObject controller = GameObject.FindWithTag("GameController");
                 controller.GetComponent<LevelController>().Stop();
                 
+                AudioManagerFactory audioManager =audioManager = GameObject.FindWithTag("Audio").GetComponent<AudioManagerFactory>();
                 audioManager.PlaySFX(audioManager.dieSoundClip);
-                Destroy(gameObject);
                 audioManager.musicAudioSource.Stop();
                 
                 gameOverUI.SetActive(true);
@@ -151,11 +150,8 @@ public class PlatformerRobot : MonoBehaviour
 
     // void OnCollisionEnter2D(Collision2D collision)
     // {
-    //     if (collision.gameObject.tag.Equals("Ground"))
-    //     {
-    //         // Code khi Robot chạm đất
-
-    //         isJumping = false; // Đặt lại trạng thái bay khi Robot chạm đất
+    //     if (collision.gameObject.tag.Equals("Ground")) {
+    //         onGround = true;
     //     }
     // }
 

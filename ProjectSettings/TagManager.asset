@@ -10,6 +10,7 @@ TagManager:
   - Timer
   - Background
   - Menu
+  - Floor
   layers:
   - Default
   - TransparentFX

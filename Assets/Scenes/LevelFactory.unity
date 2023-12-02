@@ -419,7 +419,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 2.5
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
@@ -540,24 +540,7 @@ MonoBehaviour:
   - {fileID: 1639789678}
   - {fileID: 350865082}
   - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  - {fileID: 377025461}
-  life: 20
+  life: 3
   gameOverUI: {fileID: 1728726126}
 --- !u!61 &64302314
 BoxCollider2D:
@@ -1173,7 +1156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeValue: 0
   score: 0
-  timerText: {fileID: 0}
+  timerText: {fileID: 1595165608}
   highScoreText: {fileID: 393013652}
 --- !u!114 &393013652
 MonoBehaviour:
@@ -8165,7 +8148,7 @@ GameObject:
   - component: {fileID: 1287179306}
   m_Layer: 5
   m_Name: Canvas
-  m_TagString: Untagged
+  m_TagString: Menu
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9251,6 +9234,10 @@ PrefabInstance:
     - target: {fileID: 5131083196450190560, guid: 28fe9e4fb1fb6884db1fd07a852ad7fd, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5131083196450190560, guid: 28fe9e4fb1fb6884db1fd07a852ad7fd, type: 3}
+      propertyPath: m_TagString
+      value: Floor
       objectReference: {fileID: 0}
     - target: {fileID: 7017318119537548574, guid: 28fe9e4fb1fb6884db1fd07a852ad7fd, type: 3}
       propertyPath: m_LocalScale.x

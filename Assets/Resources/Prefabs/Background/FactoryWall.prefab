@@ -100,6 +100,6 @@ MonoBehaviour:
   floor: {fileID: 0}
   floorPrefab: {fileID: 3327667920451030955}
   canMove: 1
-  moveSpeed: 1.2
-  prefabMoveSpeed: 1.2
+  moveSpeed: 1.5
+  prefabMoveSpeed: 1.5
   state: 0
