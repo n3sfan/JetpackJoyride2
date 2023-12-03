@@ -98,7 +98,15 @@ public class LevelController : MonoBehaviour {
             return;
         }
 
+
         // Độ cao của Camera (trong Project để mặc định của Unity là 5)
+        WIDTH = 17.7f;
+
+        // Chỉnh Camera
+        float ratio = (float) Screen.width / Screen.height;
+
+        Camera.main.orthographicSize = Mathf.Max(5f, 1 / ratio * 18.1f * 0.5f - 0.01f);
+
         HEIGHT = Camera.main.orthographicSize * 2f;
         CAMERA_WIDTH = HEIGHT * Camera.main.aspect;
 
@@ -116,6 +124,7 @@ public class LevelController : MonoBehaviour {
    
     private void Start()
     {
+        // Chỉnh Camera
         float margin = (CAMERA_WIDTH - 18.1f) / (CAMERA_WIDTH);
         Camera.main.rect = new Rect(margin, 0f, 1f - 2 * margin, 1f);
 
@@ -298,7 +307,7 @@ public class LevelController : MonoBehaviour {
         arcPlaySeconds += Time.deltaTime;
 
         // TODO FIX
-        int arcTotalSeconds = 12;
+        int arcTotalSeconds = 40;
 
         if (force || arcPlaySeconds >= arcTotalSeconds) {
             this.index = index;
@@ -354,13 +363,13 @@ public class LevelController : MonoBehaviour {
                 DontDestroyOnLoad(obj);
         }
 
-        // Màn chuyển là LevelFactory
-        if (levelIndex == 3 || index == 1) {
+        // Màn chuyển là LevelFactory, đã có sẵn tất cả các GameObject
+        if (index == 1) {
+            Debug.Log("dd");
+
             //Destroy(GameObject.FindWithTag("Menu"));
             //Destroy(GameObject.FindWithTag("Robot"));
             //Destroy(this.gameObject);
-            Destroy(GameObject.Find("EventSystem"));
-            Destroy(GameObject.Find("Jumpfire"));
 
             foreach (GameObject obj in objects) {
                 Destroy(obj);
@@ -452,7 +461,8 @@ public class LevelController : MonoBehaviour {
         }
     }
 
-    float changeBackgroundInterval = 10f;
+    // TODO FIX
+    float changeBackgroundInterval = 15f;
 
     /**
     * Các thiết lập khi chuyển Scene
@@ -528,6 +538,9 @@ public class LevelController : MonoBehaviour {
             }
         }
 
+        // Chỉnh Camera
+        float ratio = (float) Screen.width / Screen.height;
+        Camera.main.orthographicSize = Mathf.Max(5f, 1 / ratio * 18.1f * 0.5f - 0.01f);
         float margin = (CAMERA_WIDTH - 18.1f) / (CAMERA_WIDTH);
         Camera.main.rect = new Rect(margin, 0f, 1f - 2 * margin, 1f);
     }
