@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 480290341976113935, guid: 74222f0527179744f8d45bfe5158b8fa, type: 3}
       propertyPath: m_LocalScale.y
-      value: 2.1052191
+      value: 2.1355343
       objectReference: {fileID: 0}
     - target: {fileID: 480290341976113935, guid: 74222f0527179744f8d45bfe5158b8fa, type: 3}
       propertyPath: m_LocalPosition.x
@@ -22,7 +22,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 480290341976113935, guid: 74222f0527179744f8d45bfe5158b8fa, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.1342
+      value: 1.0947
       objectReference: {fileID: 0}
     - target: {fileID: 480290341976113935, guid: 74222f0527179744f8d45bfe5158b8fa, type: 3}
       propertyPath: m_LocalPosition.z
@@ -62,7 +62,7 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: a4385f1a712561449b4b585825591d92, type: 3}
     - target: {fileID: 7858660036282418366, guid: 74222f0527179744f8d45bfe5158b8fa, type: 3}
       propertyPath: m_Name
-      value: Background Variant 1
+      value: Ocean
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

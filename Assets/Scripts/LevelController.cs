@@ -70,16 +70,20 @@ public class LevelController : MonoBehaviour {
     * Tốc độ Scroll
     */
     private float scrollSpeed = 2f;
+
     /**
+    * UpdateBackground
     */
     private float scrollSeconds;
     private string nextBackgroundPrefabName = null;
+    private GameObject firstBackground;
+
     public float arcPlaySeconds;
 
     private float currentSpeed; // Tốc độ hiện tại của chướng ngại vật
 
     public GameObject Obstacles; // Tham chiếu đến game object của chướng ngại vật
-    private GameObject middlegroundGlass, firstBackground;
+    private GameObject middlegroundGlass;
     private GameObject backgroundFactoryWall;
 
     /**
@@ -423,7 +427,7 @@ public class LevelController : MonoBehaviour {
             this.activeObstacles.Clear();
         }
 
-         // Setup các GameObject trong scene mới
+        // Setup các GameObject trong scene mới
         GameObject.FindWithTag("Menu").GetComponent<Canvas>().worldCamera = Camera.main;
 
         // Từng Arc có các setup riêng
@@ -453,6 +457,10 @@ public class LevelController : MonoBehaviour {
         scriptMovingFloor.floorPrefab = prefabBackground;
 
         Invoke("RemoveTransitionChangeScene", levelIndex == 1 ? 0.5f : 0f);
+
+        // Reset background scrolling
+        scrollSeconds = 0;
+        nextBackgroundPrefabName = null;
         
         this.state = State.PLAYING;
     }
@@ -480,6 +488,7 @@ public class LevelController : MonoBehaviour {
     /* Scrolling Background */
     private void UpdateBackground() {
         GameObject[] tmpObjects = GameObject.FindGameObjectsWithTag("Background");
+
         if (tmpObjects != null && tmpObjects.Length > 0) {
             firstBackground = tmpObjects[0];
 
@@ -496,13 +505,13 @@ public class LevelController : MonoBehaviour {
 
                 if (nextBackgroundPrefabName != null && !firstBackground.name.StartsWith(nextBackgroundPrefabName)) {
                     scrollSeconds = 0;
-                } else  {
+                } else {
                     nextBackgroundPrefabName = null;
                     scrollSeconds += Time.deltaTime;
                 }
             }
 
-            Debug.Log(scrollSeconds + " " + nextBackgroundPrefabName + " " + firstBackground.name);
+            Debug.Log(scrollSeconds + " " + nextBackgroundPrefabName + " fr " + firstBackground.name);
         }
 
         float changeBackgroundInterval = 10;

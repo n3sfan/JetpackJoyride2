@@ -8777,7 +8777,7 @@ MonoBehaviour:
   prefabLaserBall: {fileID: 7244188966110358785, guid: 258f739160f03554ab203d36df12eace, type: 3}
   prefabLaser: {fileID: 7318730806322644533, guid: a5da549ffe0ed504185bebf8a8dec174, type: 3}
   prefabLaserBeam: {fileID: 1819899742503224579, guid: 3014ff15940dfbe49b20c4b43e568c2b, type: 3}
-  prefabFactoryWall: {fileID: 3327667920451030955, guid: 3839f87b994e9d947a6e17e87a7a86ba, type: 3}
+  prefabFactoryWall: {fileID: 3193953668904057073, guid: 5552b07aaf8829044bb732460d42dc77, type: 3}
   prefabBackground: {fileID: 7858660036282418366, guid: 74222f0527179744f8d45bfe5158b8fa, type: 3}
   state: 0
   initialSpeed: 5
