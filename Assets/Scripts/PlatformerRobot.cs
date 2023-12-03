@@ -129,20 +129,36 @@ public class PlatformerRobot : MonoBehaviour
             if (life >= 1)
             {
                 life -= 1;
+            
                 //Destroy(hearts[life].gameObject);
                 hearts[life].GetComponent<Image>().enabled = false;
             }
-            if (life < 1) {
+            if (life < 1) 
+            {
+                if (other.gameObject.name.StartsWith("Rocket"))
+                {
+                    AudioManagerFactory audioManager = GameObject.FindWithTag("Audio").GetComponent<AudioManagerFactory>();
+                    audioManager.PlaySFX(audioManager.dieSoundClip);
+                    audioManager.musicAudioSource.Stop();
+                }
+                if (other.gameObject.name.StartsWith("Laser"))
+                {
+                    AudioManagerFactory audioManager = GameObject.FindWithTag("Audio").GetComponent<AudioManagerFactory>();
+                    audioManager.PlaySFX(audioManager.electricShockClip);
+                    audioManager.musicAudioSource.Stop();
+                }
+                if (other.gameObject.name.StartsWith("CayChup"))
+                {
+                    AudioManagerFactory audioManager = GameObject.FindWithTag("Audio").GetComponent<AudioManagerFactory>();
+                    audioManager.PlaySFX(audioManager.brokenEngineClip);
+                    audioManager.musicAudioSource.Stop();
+                }
                 this.gameObject.GetComponent<Animator>().enabled = false;
                 GameObject score = GameObject.FindGameObjectWithTag("Timer");
                 score.GetComponent<Score>().PauseTimer();
 
                 GameObject controller = GameObject.FindWithTag("GameController");
                 controller.GetComponent<LevelController>().Stop();
-                
-                AudioManagerFactory audioManager = GameObject.FindWithTag("Audio").GetComponent<AudioManagerFactory>();
-                audioManager.PlaySFX(audioManager.dieSoundClip);
-                audioManager.musicAudioSource.Stop();
                 
                 gameOverUI.SetActive(true);
             }
