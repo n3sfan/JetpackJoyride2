@@ -28,7 +28,7 @@ public class pause : MonoBehaviour
     }
 
     public void Pause()
-    {
+    {   
         audioManager = FindObjectOfType<AudioManagerFactory>();
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
@@ -67,9 +67,6 @@ public class pause : MonoBehaviour
         controller.ChangeArc(true, SceneManager.GetActiveScene().buildIndex);
         
         // Reset các thông số của Robot
-        GameObject.FindWithTag("Timer").GetComponent<Score>().timeValue = 0;
-        GameObject.FindWithTag("Timer").GetComponent<Score>().score = 0;
-
         robot.life = 3;
         foreach (GameObject obj in robot.hearts) {
             obj.GetComponent<Image>().enabled = true;

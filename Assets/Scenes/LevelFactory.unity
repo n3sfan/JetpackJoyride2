@@ -8782,6 +8782,7 @@ MonoBehaviour:
   state: 0
   initialSpeed: 5
   acceleration: 0.5
+  arcPlaySeconds: 0
   Obstacles: {fileID: 0}
 --- !u!1 &1595165605
 GameObject:
