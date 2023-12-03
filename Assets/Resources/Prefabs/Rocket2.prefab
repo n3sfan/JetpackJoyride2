@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7722001517247661023}
   - component: {fileID: 3356216379598553338}
   m_Layer: 0
-  m_Name: Rocket 2
+  m_Name: Rocket2
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

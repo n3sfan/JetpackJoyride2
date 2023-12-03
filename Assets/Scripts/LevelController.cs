@@ -73,7 +73,7 @@ public class LevelController : MonoBehaviour {
     */
     private float scrollSeconds;
     private string nextBackgroundPrefabName = null;
-    private float arcPlaySeconds;
+    public float arcPlaySeconds;
 
     private float currentSpeed; // Tốc độ hiện tại của chướng ngại vật
 
@@ -118,6 +118,10 @@ public class LevelController : MonoBehaviour {
 
     private void Update()
     {
+        if (this.state == State.PAUSE) {
+            return;
+        }
+
         if (this.state == State.PLAYING ) {
             // Gọi hàm pawn tương ứng cho mỗi arc khi trò chơi bắt đầu
             if (SceneManager.GetActiveScene().name == "LevelFactory")
@@ -269,14 +273,13 @@ public class LevelController : MonoBehaviour {
         if (levelIndex == 3) {
             return;
         }
-
-        this.index = index;
         arcPlaySeconds += Time.deltaTime;
 
         // TODO FIX
         int arcTotalSeconds = 10;
 
         if (force || arcPlaySeconds >= arcTotalSeconds) {
+            this.index = index;
             // Mảng này lúc này toàn FactoryWall
             objects = GameObject.FindGameObjectsWithTag("Background");
             // Background ở vị trí phải nhất
@@ -300,7 +303,7 @@ public class LevelController : MonoBehaviour {
                 }
             }
 
-            PreSceneLoad();
+            PreSceneLoad(index != -1 ? index : levelIndex + 1);
             Invoke("LoadScene", 1.5f);
             // Để không bị gọi lần 2
             arcPlaySeconds = 0;
@@ -329,7 +332,7 @@ public class LevelController : MonoBehaviour {
             if (index == 1) {
                 Destroy(GameObject.FindWithTag("Menu"));
                 Destroy(GameObject.FindWithTag("Robot"));
-                Destroy(this.gameObject);
+                //Destroy(this.gameObject);
                 Destroy(GameObject.Find("EventSystem"));
                 Destroy(GameObject.Find("Jumpfire"));
 
@@ -373,18 +376,34 @@ public class LevelController : MonoBehaviour {
     //     return levelIndex;
     // }
 
-    void PreSceneLoad() {
+    void PreSceneLoad(int nextLevelIndex) {
         GameObject.Find("TransitionFade").GetComponent<Animator>().SetBool("changing_scene", true);
 
-        switch (levelIndex + 1) {
+        // TODO Thêm chỉ số vào sau prefab để dễ thêm
+        switch (nextLevelIndex) {
             case 1:
                 prefabBackground = (GameObject) Resources.Load("Prefabs/Background/Factory");
+
+                prefabLaser = (GameObject) Resources.Load("Prefabs/Laser");
+                prefabLaserBall = (GameObject) Resources.Load("Prefabs/LaserBall");
+                prefabRocket = (GameObject) Resources.Load("Prefabs/Rocket");
+                prefabCayChup = (GameObject) Resources.Load("Prefabs/CayChup");
                 break;
             case 2:
                 prefabBackground = (GameObject) Resources.Load("Prefabs/Background/Ocean");
+                
+                prefabLaser = (GameObject) Resources.Load("Prefabs/Laser2");
+                prefabLaserBall = (GameObject) Resources.Load("Prefabs/LaserBall2");
+                prefabRocket = (GameObject) Resources.Load("Prefabs/Rocket2");
+                prefabCayChup = (GameObject) Resources.Load("Prefabs/CayChup2");
                 break;
             case 3:
                 prefabBackground = (GameObject) Resources.Load("Prefabs/Background/End");
+                
+                prefabLaser = (GameObject) Resources.Load("Prefabs/Laser");
+                prefabLaserBall = (GameObject) Resources.Load("Prefabs/LaserBall");
+                prefabRocket = (GameObject) Resources.Load("Prefabs/Rocket");
+                prefabCayChup = (GameObject) Resources.Load("Prefabs/CayChup");
                 break;
             default:
                 break;
@@ -395,6 +414,10 @@ public class LevelController : MonoBehaviour {
     * Các thiết lập khi chuyển Scene
     */
     void PostSceneLoad(Scene scene, LoadSceneMode mode) {
+        if (this.state != State.CHANGING_SCENE) {
+            return;
+        }
+
         if (this.activeObstacles != null) {
             this.activeObstacles.Clear();
         }
@@ -428,9 +451,23 @@ public class LevelController : MonoBehaviour {
         MovingFloor scriptMovingFloor = background.GetComponent<MovingFloor>();
         scriptMovingFloor.floorPrefab = prefabBackground;
 
-        GameObject.Find("TransitionFade").GetComponent<Animator>().SetBool("changing_scene", false);
+        Invoke("RemoveTransitionChangeScene", levelIndex == 1 ? 0.5f : 0f);
 
         this.state = State.PLAYING;
+    }
+
+    private void RemoveTransitionChangeScene() {
+        GameObject.Find("TransitionFade").GetComponent<Animator>().SetBool("changing_scene", false);
+
+        // Xóa Controller mới của Level 1
+        GameObject[] objects = GameObject.FindGameObjectsWithTag("GameController");
+
+        foreach (GameObject obj in objects) {
+            if (obj != this.gameObject) {
+                Destroy(obj);
+                break;
+            }
+        }
     }
 
     /* Scrolling Background */
@@ -750,7 +787,11 @@ public class LevelController : MonoBehaviour {
     /* Trạng thái của Màn chơi */
     public enum State {
         PLAYING,
-        CHANGING_SCENE, // Từ khi arcPlaySeconds >= arcTotalSeconds
+        /** 
+        * Từ khi arcPlaySeconds >= arcTotalSeconds đến trước khi Scene mới đã được load
+        * Không có chướng ngại vật nào trong trạng thái này.
+        */
+        CHANGING_SCENE, 
         PAUSE,
         STOPPED // Khi Robot va chạm với Obstacle 
     }

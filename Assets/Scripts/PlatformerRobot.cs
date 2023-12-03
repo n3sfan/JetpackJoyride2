@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlatformerRobot : MonoBehaviour
 {
@@ -122,7 +123,8 @@ public class PlatformerRobot : MonoBehaviour
             if (life >= 1)
             {
                 life -= 1;
-                Destroy(hearts[life].gameObject);
+                //Destroy(hearts[life].gameObject);
+                hearts[life].GetComponent<Image>().enabled = false;
             }
             if (life < 1) {
                 this.gameObject.GetComponent<Animator>().enabled = false;
@@ -132,7 +134,7 @@ public class PlatformerRobot : MonoBehaviour
                 GameObject controller = GameObject.FindWithTag("GameController");
                 controller.GetComponent<LevelController>().Stop();
                 
-                AudioManagerFactory audioManager =audioManager = GameObject.FindWithTag("Audio").GetComponent<AudioManagerFactory>();
+                AudioManagerFactory audioManager = GameObject.FindWithTag("Audio").GetComponent<AudioManagerFactory>();
                 audioManager.PlaySFX(audioManager.dieSoundClip);
                 audioManager.musicAudioSource.Stop();
                 
