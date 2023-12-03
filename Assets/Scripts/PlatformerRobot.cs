@@ -61,8 +61,6 @@ public class PlatformerRobot : MonoBehaviour
     void FixedUpdate()
     {
         if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow)) {
-            
-
             jumpIncreaseTime += Time.fixedDeltaTime;
 
             if (jumpForce < MAX_JUMP_FORCE && jumpIncreaseTime - lastForceIncreasedTime >= 0.1f) {

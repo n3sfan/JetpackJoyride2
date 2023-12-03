@@ -50,9 +50,10 @@ public class MovingFloor : MonoBehaviour
         floor.position = new Vector3(x, floor.position.y, floor.position.z);
         
         // Not x <= 0 for glitch
-        if (this.state == State.INITIAL && x < 0f) {
+        // Dự trù 1 ô
+        if (this.state == State.INITIAL && x <= 1f) {
             //Instantiate(floorPrefab, new Vector3(LevelController.WIDTH / 2, -LevelController.HEIGHT / 2 + LevelController.FLOOR_HEIGHT / 2, 0), Quaternion.identity);
-            GameObject gameObject = Instantiate(floorPrefab, new Vector3(LevelController.WIDTH, floor.position.y, 0), Quaternion.identity);
+            GameObject gameObject = Instantiate(floorPrefab, new Vector3(x + LevelController.WIDTH, floor.position.y, 0), Quaternion.identity);
             gameObject.GetComponent<MovingFloor>().moveSpeed = prefabMoveSpeed;
 
             this.state = State.PAST_ONE_HALF;

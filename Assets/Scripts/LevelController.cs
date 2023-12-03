@@ -7,6 +7,7 @@ using Unity.VisualScripting;
 using UnityEngine.SceneManagement;
 using UnityEngine.Assertions;
 using System.Linq;
+using UnityEditor;
 
 
 public class LevelController : MonoBehaviour {
@@ -14,6 +15,7 @@ public class LevelController : MonoBehaviour {
     * Chiều cao, rộng của vùng Camera.
     */
     public static float HEIGHT;
+    public static float CAMERA_WIDTH;
     public static float WIDTH;
     /** 
     * Chiều cao sàn, trần. 
@@ -98,13 +100,11 @@ public class LevelController : MonoBehaviour {
 
         // Độ cao của Camera (trong Project để mặc định của Unity là 5)
         HEIGHT = Camera.main.orthographicSize * 2f;
-        WIDTH = HEIGHT * Camera.main.aspect;
+        CAMERA_WIDTH = HEIGHT * Camera.main.aspect;
 
         FLOOR_HEIGHT = 2;
         CEILING_HEIGHT = 0.6f;
 
-        MIN_X = -WIDTH / 2;
-        MAX_X = WIDTH / 2;
         MIN_Y = -HEIGHT / 2;
         MAX_Y = HEIGHT / 2;
 
@@ -116,6 +116,13 @@ public class LevelController : MonoBehaviour {
    
     private void Start()
     {
+        float margin = (CAMERA_WIDTH - 18.1f) / (CAMERA_WIDTH);
+        Camera.main.rect = new Rect(margin, 0f, 1f - 2 * margin, 1f);
+
+        WIDTH = 17.7f;
+
+        MIN_X = -WIDTH / 2;
+        MAX_X = WIDTH / 2;
 
         this.activeObstacles = new List<GameObject>();
         currentSpeed = initialSpeed;       
@@ -126,6 +133,8 @@ public class LevelController : MonoBehaviour {
         DontDestroyOnLoad(this.gameObject);
         DontDestroyOnLoad(GameObject.Find("EventSystem"));
         DontDestroyOnLoad(GameObject.Find("Jumpfire"));
+
+        SetupScene();
     }
 
     private void Update()
@@ -282,10 +291,14 @@ public class LevelController : MonoBehaviour {
     }
 
     public void ChangeArc(bool force, int index = -1) {
+        if (!force && levelIndex == 3) {
+            return;
+        }
+
         arcPlaySeconds += Time.deltaTime;
 
         // TODO FIX
-        int arcTotalSeconds = 10;
+        int arcTotalSeconds = 12;
 
         if (force || arcPlaySeconds >= arcTotalSeconds) {
             this.index = index;
@@ -293,31 +306,43 @@ public class LevelController : MonoBehaviour {
 
             // Mảng này lúc này toàn FactoryWall
             objects = GameObject.FindGameObjectsWithTag("Background");
-            // Background ở vị trí phải nhất
-            GameObject background = objects[0];
-            
-            // Đợi tới Frame có Factory Bg
-            if (!force && !background.name.StartsWith("FactoryWall")) {
-                return;
-            }
-            
-            this.state = State.CHANGING_SCENE;
-            
-            // Còn chướng ngại vật, ko chuyển.
-            if (!force && this.activeObstacles.Count > 0) {
-                return;
-            }
 
-            if (force) {
-                foreach (GameObject obj in activeObstacles) {
-                    Destroy(obj);
+            if (objects != null) {
+                // Background ở vị trí phải nhất
+                GameObject background = objects[0];
+
+                this.state = State.CHANGING_SCENE;
+
+                bool allFactoryWall = true;
+
+                foreach (GameObject obj in objects) {
+                    if (!obj.name.StartsWith("FactoryWall")) {
+                        allFactoryWall = false;
+                        break;
+                    }
                 }
-            }
+                
+                // Đợi tới Frame có Factory Bg
+                if (!force && !allFactoryWall) {
+                    return;
+                }
+                
+                // Còn chướng ngại vật, ko chuyển.
+                if (!force && this.activeObstacles.Count > 0) {
+                    return;
+                }
 
-            PreSceneLoad(index != -1 ? index : (levelIndex < 3 ? levelIndex + 1 : 1));
-            Invoke("LoadScene", 1.5f);
-            // Để không bị gọi lần 2
-            arcPlaySeconds = 0;
+                if (force) {
+                    foreach (GameObject obj in activeObstacles) {
+                        Destroy(obj);
+                    }
+                }
+
+                PreSceneLoad(index != -1 ? index : (levelIndex < 3 ? levelIndex + 1 : 1));
+                Invoke("LoadScene", 1.5f);
+                // Để không bị gọi lần 2
+                arcPlaySeconds = 0;
+            }
         }
     }
 
@@ -346,10 +371,10 @@ public class LevelController : MonoBehaviour {
         if (index == -1) {
             if (levelIndex == 3) {
                 // TODO Làm gì khi tới màn cuối.
-                levelIndex = 0;
-            } 
-            
-            SceneManager.LoadScene(++levelIndex, LoadSceneMode.Single);
+                //levelIndex = 0;
+            } else {
+                SceneManager.LoadScene(++levelIndex, LoadSceneMode.Single);
+            }
         } else {
             this.levelIndex = index;
             SceneManager.LoadScene(index, LoadSceneMode.Single);
@@ -389,6 +414,10 @@ public class LevelController : MonoBehaviour {
     //     return levelIndex;
     // }
 
+    void SetupScene() {
+        this.nextBackgroundPrefabName = prefabBackground.name;
+    }
+
     void PreSceneLoad(int nextLevelIndex) {
         GameObject.Find("TransitionFade").GetComponent<Animator>().SetBool("changing_scene", true);
 
@@ -423,6 +452,8 @@ public class LevelController : MonoBehaviour {
         }
     }
 
+    float changeBackgroundInterval = 10f;
+
     /**
     * Các thiết lập khi chuyển Scene
     */
@@ -437,6 +468,9 @@ public class LevelController : MonoBehaviour {
 
         // Setup các GameObject trong scene mới
         GameObject.FindWithTag("Menu").GetComponent<Canvas>().worldCamera = Camera.main;
+
+        float margin = (CAMERA_WIDTH - 18.1f) / (CAMERA_WIDTH);
+        Camera.main.rect = new Rect(margin, 0f, 1f - 2 * margin, 1f);
 
         // Từng Arc có các setup riêng
         switch (levelIndex) {
@@ -458,19 +492,20 @@ public class LevelController : MonoBehaviour {
         LaserBeam.SPEED = 2f * SPEED_MULTIPLIER;
         CayChup.SPEED = 4f * SPEED_MULTIPLIER;
 
-        // Set background của Scene mới 
-        GameObject[] objects = GameObject.FindGameObjectsWithTag("Background");
-        // Background ở vị trí phải nhất
-        GameObject background = objects[objects.Length - 1];
-        MovingFloor scriptMovingFloor = background.GetComponent<MovingFloor>();
-        scriptMovingFloor.floorPrefab = prefabBackground;
+        // Background
+        if (levelIndex != 1 && GameObject.FindWithTag("Background") == null) {
+            Instantiate(prefabBackground, new Vector3(-0.03f, 1.33f), Quaternion.identity);
+        }
+
+        if ("FactoryWall" == nextBackgroundPrefabName) {
+            scrollSeconds = changeBackgroundInterval;
+        }
 
         Invoke("RemoveTransitionChangeScene", levelIndex == 1 ? 1.5f : 0.2f);
 
-        // Reset background scrolling
-        scrollSeconds = 0;
-        nextBackgroundPrefabName = null;
-        
+        SetupScene();
+
+        this.nextBackgroundPrefabName = prefabBackground.name;
         this.state = State.PLAYING;
     }
 
@@ -492,13 +527,17 @@ public class LevelController : MonoBehaviour {
                 break;
             }
         }
+
+        float margin = (CAMERA_WIDTH - 18.1f) / (CAMERA_WIDTH);
+        Camera.main.rect = new Rect(margin, 0f, 1f - 2 * margin, 1f);
     }
 
     /* Scrolling Background */
     private void UpdateBackground() {
         GameObject[] tmpObjects = GameObject.FindGameObjectsWithTag("Background");
 
-        if (tmpObjects != null && tmpObjects.Length > 0) {
+        // Điều kiện để scrollSeconds được tăng
+        if (tmpObjects != null && tmpObjects.Length > 0 && scrollSeconds < changeBackgroundInterval) {
             firstBackground = tmpObjects[0];
 
             if (firstBackground != null) {
@@ -515,7 +554,6 @@ public class LevelController : MonoBehaviour {
                 if (nextBackgroundPrefabName != null && !firstBackground.name.StartsWith(nextBackgroundPrefabName)) {
                     scrollSeconds = 0;
                 } else {
-                    nextBackgroundPrefabName = null;
                     scrollSeconds += Time.deltaTime;
                 }
             }
@@ -523,7 +561,6 @@ public class LevelController : MonoBehaviour {
             //Debug.Log(scrollSeconds + " " + nextBackgroundPrefabName + " fr " + firstBackground.name);
         }
 
-        float changeBackgroundInterval = 10;
 
         // Trình tự: Outside -> Factory Bg, lặp lại.
         if (scrollSeconds >= changeBackgroundInterval) {
@@ -542,6 +579,8 @@ public class LevelController : MonoBehaviour {
                         scriptMovingFloor.prefabMoveSpeed = 1.5f;
 
                         nextBackgroundPrefabName = prefabBackground.name;
+                    } else if (this.state == State.CHANGING_SCENE) {
+                        nextBackgroundPrefabName = prefabFactoryWall.name;
                     }
                 } else {
                     scriptMovingFloor.floorPrefab = prefabFactoryWall;
