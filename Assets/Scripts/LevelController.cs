@@ -307,7 +307,7 @@ public class LevelController : MonoBehaviour {
                 }
             }
 
-            PreSceneLoad(index != -1 ? index : levelIndex + 1);
+            PreSceneLoad(index != -1 ? index : (levelIndex < 3 ? levelIndex + 1 : 1));
             Invoke("LoadScene", 1.5f);
             // Để không bị gọi lần 2
             arcPlaySeconds = 0;
@@ -322,6 +322,19 @@ public class LevelController : MonoBehaviour {
                 DontDestroyOnLoad(obj);
         }
 
+        // Màn chuyển là LevelFactory
+        if (levelIndex == 3 || index == 1) {
+            Destroy(GameObject.FindWithTag("Menu"));
+            Destroy(GameObject.FindWithTag("Robot"));
+            //Destroy(this.gameObject);
+            Destroy(GameObject.Find("EventSystem"));
+            Destroy(GameObject.Find("Jumpfire"));
+
+            foreach (GameObject obj in objects) {
+                Destroy(obj);
+            }
+        }
+
         // Chuyển scene
         if (index == -1) {
             if (levelIndex == 3) {
@@ -331,20 +344,8 @@ public class LevelController : MonoBehaviour {
             
             SceneManager.LoadScene(++levelIndex, LoadSceneMode.Single);
         } else {
+            this.levelIndex = index;
             SceneManager.LoadScene(index, LoadSceneMode.Single);
-
-            // Màn chuyển là LevelFactory
-            if (index == 1) {
-                Destroy(GameObject.FindWithTag("Menu"));
-                Destroy(GameObject.FindWithTag("Robot"));
-                //Destroy(this.gameObject);
-                Destroy(GameObject.Find("EventSystem"));
-                Destroy(GameObject.Find("Jumpfire"));
-
-                foreach (GameObject obj in objects) {
-                    Destroy(obj);
-                }
-            }
         }
 
         arcPlaySeconds = 0;
@@ -442,6 +443,7 @@ public class LevelController : MonoBehaviour {
                 SPEED_MULTIPLIER = 3f;
                 break;
             default:
+                SPEED_MULTIPLIER = 2f;
                 break;
         }
 
