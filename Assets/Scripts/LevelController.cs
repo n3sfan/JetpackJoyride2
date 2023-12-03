@@ -346,7 +346,7 @@ public class LevelController : MonoBehaviour {
         if (index == -1) {
             if (levelIndex == 3) {
                 // TODO Làm gì khi tới màn cuối.
-                levelIndex = 0;
+                //levelIndex = 0;
             } 
             
             SceneManager.LoadScene(++levelIndex, LoadSceneMode.Single);
