@@ -112,11 +112,13 @@ public class LevelController : MonoBehaviour {
         DontDestroyOnLoad(GameObject.FindWithTag("Menu"));
         DontDestroyOnLoad(GameObject.FindWithTag("Robot"));
         DontDestroyOnLoad(this.gameObject);
+        DontDestroyOnLoad(GameObject.Find("EventSystem"));
+        DontDestroyOnLoad(GameObject.Find("Jumpfire"));
     }
 
     private void Update()
     {
-        if (this.state == State.PLAYING) {
+        if (this.state == State.PLAYING ) {
             // Gọi hàm pawn tương ứng cho mỗi arc khi trò chơi bắt đầu
             if (SceneManager.GetActiveScene().name == "LevelFactory")
             {
@@ -150,11 +152,12 @@ public class LevelController : MonoBehaviour {
             // SpawnProjectiles();
             // SpawnLaserBeam();
             // SpawnCayChup();
-            
         }
 
-        UpdateBackground();
-        ChangeArc();
+        if (this.state == State.PLAYING || this.state == State.CHANGING_SCENE) {
+            UpdateBackground();
+            ChangeArc();
+        }
 
         // Tăng tốc độ của chướng ngại vật dần dần
         //currentSpeed += acceleration * Time.deltaTime;
@@ -166,6 +169,12 @@ public class LevelController : MonoBehaviour {
         // Xóa Chướng ngại vật sau khi ra khỏi Camera.
         for (int i = this.activeObstacles.Count - 1; i >= 0; --i) {
             GameObject obstacle = this.activeObstacles[i];
+
+            if (obstacle == null) {
+                this.activeObstacles.RemoveAt(i);
+                continue;
+            }
+
             float width;
 
             if (obstacle.name.StartsWith("LaserBeam")) {
@@ -178,7 +187,6 @@ public class LevelController : MonoBehaviour {
 
             if (obstacle.name.StartsWith("CayChup")) {
                 if (obstacle.transform.position.x <= -WIDTH / 2 - 30) {
-                    Debug.Log("ok " + obstacle.name + " " + obstacle.transform.position.x);
                     Destroy(obstacle);
                     this.activeObstacles.RemoveAt(i);
                 }
@@ -249,52 +257,125 @@ public class LevelController : MonoBehaviour {
 
 
     /* Scene Load */
-    private void ChangeArc() {
+    GameObject[] objects;
+    int index = -1;
+
+    public void ChangeArc(int index = -1) {
+        ChangeArc(false, -1);
+    }
+
+    public void ChangeArc(bool force, int index = -1) {
         // Level max, tạm thời ko đổi nữa
         if (levelIndex == 3) {
             return;
         }
 
+        this.index = index;
         arcPlaySeconds += Time.deltaTime;
 
-        int arcTotalSeconds = 30;
+        // TODO FIX
+        int arcTotalSeconds = 10;
 
-        if (arcPlaySeconds >= arcTotalSeconds) {
+        if (force || arcPlaySeconds >= arcTotalSeconds) {
             // Mảng này lúc này toàn FactoryWall
-            GameObject[] objects = GameObject.FindGameObjectsWithTag("Background");
+            objects = GameObject.FindGameObjectsWithTag("Background");
             // Background ở vị trí phải nhất
             GameObject background = objects[0];
             
             // Đợi tới Frame có Factory Bg
-            if (!background.name.StartsWith("FactoryWall")) {
+            if (!force && !background.name.StartsWith("FactoryWall")) {
                 return;
             }
-
+            
             this.state = State.CHANGING_SCENE;
-
+            
             // Còn chướng ngại vật, ko chuyển.
-            if (this.activeObstacles.Count > 0) {
+            if (!force && this.activeObstacles.Count > 0) {
                 return;
             }
 
-            // Giữ cho Scene sau
-            foreach (GameObject obj in objects) {
-                DontDestroyOnLoad(obj);
+            if (force) {
+                foreach (GameObject obj in activeObstacles) {
+                    Destroy(obj);
+                }
             }
-            PreSceneLoad();
 
-            // Chuyển scene
+            PreSceneLoad();
+            Invoke("LoadScene", 1.5f);
+            // Để không bị gọi lần 2
+            arcPlaySeconds = 0;
+        }
+    }
+
+    void LoadScene() {
+        objects = GameObject.FindGameObjectsWithTag("Background");
+        // Giữ cho Scene sau
+        foreach (GameObject obj in objects) {
+            if (obj != null)
+                DontDestroyOnLoad(obj);
+        }
+
+        // Chuyển scene
+        if (index == -1) {
             if (levelIndex == 3) {
                 // TODO Làm gì khi tới màn cuối.
             } else {
                 SceneManager.LoadScene(++levelIndex, LoadSceneMode.Single);
             }
+        } else {
+            SceneManager.LoadScene(index, LoadSceneMode.Single);
 
-            arcPlaySeconds = 0;
+            // Màn chuyển là LevelFactory
+            if (index == 1) {
+                Destroy(GameObject.FindWithTag("Menu"));
+                Destroy(GameObject.FindWithTag("Robot"));
+                Destroy(this.gameObject);
+                Destroy(GameObject.Find("EventSystem"));
+                Destroy(GameObject.Find("Jumpfire"));
+
+                foreach (GameObject obj in objects) {
+                    Destroy(obj);
+                }
+            }
         }
+
+        arcPlaySeconds = 0;
     }
 
+    /**
+    * Trả về levelIndex của scene tiếp theo nếu load thành công,
+    * Hoặc levelIndex cũ nếu chưa load được.
+    **/
+    // public static int ChangeScene(int levelIndex) {
+    //     GameObject[] objects = GameObject.FindGameObjectsWithTag("Background");
+    //     // Background ở vị trí phải nhất
+    //     GameObject background = objects[0];
+        
+    //     // Đợi tới Frame có Factory Bg
+    //     if (!background.name.StartsWith("FactoryWall")) {
+    //         return levelIndex;
+    //     }
+       
+    //     // Giữ cho Scene sau
+    //     foreach (GameObject obj in objects) {
+    //         DontDestroyOnLoad(obj);
+    //     }
+
+    //     GameObject.Find("TransitionFade").GetComponent<Animator>().SetBool("changing_scene", true);
+
+    //     // Chuyển scene
+    //     if (levelIndex == 3) {
+    //         // TODO Làm gì khi tới màn cuối.
+    //     } else {
+    //         SceneManager.LoadScene(++levelIndex, LoadSceneMode.Single);
+    //     }
+
+    //     return levelIndex;
+    // }
+
     void PreSceneLoad() {
+        GameObject.Find("TransitionFade").GetComponent<Animator>().SetBool("changing_scene", true);
+
         switch (levelIndex + 1) {
             case 1:
                 prefabBackground = (GameObject) Resources.Load("Prefabs/Background/Factory");
@@ -324,13 +405,13 @@ public class LevelController : MonoBehaviour {
         // Từng Arc có các setup riêng
         switch (levelIndex) {
             case 1:
-                SPEED_MULTIPLIER = 2;
+                SPEED_MULTIPLIER = 2f;
                 break;
             case 2:
-                SPEED_MULTIPLIER = 3;
+                SPEED_MULTIPLIER = 2.5f;
                 break;
             case 3:
-                SPEED_MULTIPLIER = 4;
+                SPEED_MULTIPLIER = 3f;
                 break;
             default:
                 break;
@@ -338,7 +419,7 @@ public class LevelController : MonoBehaviour {
 
         ProjectileRocket.SPEED = 6f * SPEED_MULTIPLIER;
         LaserBeam.SPEED = 2f * SPEED_MULTIPLIER;
-        CayChup.SPEED = 2f * SPEED_MULTIPLIER;
+        CayChup.SPEED = 4f * SPEED_MULTIPLIER;
 
         // Set background của Scene mới 
         GameObject[] objects = GameObject.FindGameObjectsWithTag("Background");
@@ -346,6 +427,8 @@ public class LevelController : MonoBehaviour {
         GameObject background = objects[objects.Length - 1];
         MovingFloor scriptMovingFloor = background.GetComponent<MovingFloor>();
         scriptMovingFloor.floorPrefab = prefabBackground;
+
+        GameObject.Find("TransitionFade").GetComponent<Animator>().SetBool("changing_scene", false);
 
         this.state = State.PLAYING;
     }
@@ -667,7 +750,8 @@ public class LevelController : MonoBehaviour {
     /* Trạng thái của Màn chơi */
     public enum State {
         PLAYING,
-        CHANGING_SCENE,
+        CHANGING_SCENE, // Từ khi arcPlaySeconds >= arcTotalSeconds
+        PAUSE,
         STOPPED // Khi Robot va chạm với Obstacle 
     }
 }
