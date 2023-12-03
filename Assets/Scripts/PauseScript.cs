@@ -109,6 +109,25 @@ public class pause : MonoBehaviour
     }
     public void mainmenu()
     {
+        Resume();
         SceneManager.LoadScene(0);
+
+        if (GameObject.FindWithTag("Menu") != null)
+            Destroy(GameObject.FindWithTag("Menu"));
+        if (GameObject.FindWithTag("Robot") != null)
+            Destroy(GameObject.FindWithTag("Robot"));
+        if (GameObject.FindWithTag("GameController") != null)
+            Destroy(GameObject.FindWithTag("GameController"));
+        if (GameObject.Find("EventSystem") != null)
+            Destroy(GameObject.Find("EventSystem"));
+        if (GameObject.Find("Jumpfire") != null)
+            Destroy(GameObject.Find("Jumpfire"));
+
+        GameObject[] objects = GameObject.FindGameObjectsWithTag("Background");
+        // Giữ cho Scene sau
+        foreach (GameObject obj in objects) {
+            if (obj != null)
+                Destroy(obj);
+        }        
     }
 }
