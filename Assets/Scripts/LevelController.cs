@@ -90,6 +90,12 @@ public class LevelController : MonoBehaviour {
     * Khởi tạo 1 số giá trị toàn cục hay dùng.
     */
     void Awake() {
+        // Không khởi tạo nữa
+        if (GameObject.FindWithTag("GameController") != this.gameObject) {
+            Destroy(this.gameObject);
+            return;
+        }
+
         // Độ cao của Camera (trong Project để mặc định của Unity là 5)
         HEIGHT = Camera.main.orthographicSize * 2f;
         WIDTH = HEIGHT * Camera.main.aspect;
@@ -110,6 +116,7 @@ public class LevelController : MonoBehaviour {
    
     private void Start()
     {
+
         this.activeObstacles = new List<GameObject>();
         currentSpeed = initialSpeed;       
 
@@ -324,8 +331,8 @@ public class LevelController : MonoBehaviour {
 
         // Màn chuyển là LevelFactory
         if (levelIndex == 3 || index == 1) {
-            Destroy(GameObject.FindWithTag("Menu"));
-            Destroy(GameObject.FindWithTag("Robot"));
+            //Destroy(GameObject.FindWithTag("Menu"));
+            //Destroy(GameObject.FindWithTag("Robot"));
             //Destroy(this.gameObject);
             Destroy(GameObject.Find("EventSystem"));
             Destroy(GameObject.Find("Jumpfire"));
@@ -513,7 +520,7 @@ public class LevelController : MonoBehaviour {
                 }
             }
 
-            Debug.Log(scrollSeconds + " " + nextBackgroundPrefabName + " fr " + firstBackground.name);
+            //Debug.Log(scrollSeconds + " " + nextBackgroundPrefabName + " fr " + firstBackground.name);
         }
 
         float changeBackgroundInterval = 10;

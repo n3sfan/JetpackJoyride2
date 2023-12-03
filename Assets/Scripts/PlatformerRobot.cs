@@ -45,6 +45,12 @@ public class PlatformerRobot : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Không khởi tạo nữa
+        if (GameObject.FindWithTag("Robot") != this.gameObject) {
+            Destroy(this.gameObject);
+            return;
+        }
+
         life = hearts.Length;
         body = GetComponent<Rigidbody2D>();
         gameOverUI.SetActive(false);
