@@ -458,7 +458,7 @@ public class LevelController : MonoBehaviour {
         MovingFloor scriptMovingFloor = background.GetComponent<MovingFloor>();
         scriptMovingFloor.floorPrefab = prefabBackground;
 
-        Invoke("RemoveTransitionChangeScene", levelIndex == 1 ? 0.5f : 0f);
+        Invoke("RemoveTransitionChangeScene", levelIndex == 1 ? 1.5f : 0.2f);
 
         // Reset background scrolling
         scrollSeconds = 0;
