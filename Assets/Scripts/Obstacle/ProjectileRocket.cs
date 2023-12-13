@@ -26,7 +26,7 @@ namespace Obstacle {
 
         // Chiều rộng tên lửa (theo trục x)
         float rocketWidth = 1.5f;
-        float rocketHeight = 0.4f;
+        public static float rocketHeight = 0.4f;
         private float rotateSeconds;
 
         // Start is called before the first frame update

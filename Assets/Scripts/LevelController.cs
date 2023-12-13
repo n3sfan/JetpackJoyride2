@@ -35,15 +35,15 @@ public class LevelController : MonoBehaviour {
     [SerializeField]
     private GameObject floor;
     [SerializeField]
-    private GameObject prefabRocket;
+    public GameObject prefabRocket;
     [SerializeField]
-    private GameObject prefabCayChup;
+    public GameObject prefabCayChup;
     [SerializeField]
-    private GameObject prefabLaserBall;
+    public GameObject prefabLaserBall;
     [SerializeField]
-    private GameObject prefabLaser;
+    public GameObject prefabLaser;
     [SerializeField]
-    private GameObject prefabLaserBeam;
+    public GameObject prefabLaserBeam;
     [SerializeField]
     private GameObject prefabFactoryWall;
     [SerializeField]
@@ -64,7 +64,7 @@ public class LevelController : MonoBehaviour {
     /**
     * List chướng ngại vật còn nằm trong Camera.
     */
-    private List<GameObject> activeObstacles;
+    public List<GameObject> activeObstacles;
 
     public float initialSpeed = 5f; // Tốc độ ban đầu của chướng ngại vật
     public float acceleration = 0.5f; // Tốc độ gia tăng
@@ -87,6 +87,8 @@ public class LevelController : MonoBehaviour {
     public GameObject Obstacles; // Tham chiếu đến game object của chướng ngại vật
     private GameObject middlegroundGlass;
     private GameObject backgroundFactoryWall;
+
+    ObstacleSpawner spawner;
 
     /**
     * Khởi tạo 1 số giá trị toàn cục hay dùng.
@@ -143,6 +145,7 @@ public class LevelController : MonoBehaviour {
         DontDestroyOnLoad(GameObject.Find("EventSystem"));
         DontDestroyOnLoad(GameObject.Find("Jumpfire"));
 
+        spawner = new ObstacleSpawner();
         SetupScene();
     }
 
@@ -183,6 +186,8 @@ public class LevelController : MonoBehaviour {
             {
                 PawnArc7();
             }
+
+            spawner.Update();
             // SpawnProjectiles();
             // SpawnLaserBeam();
             // SpawnCayChup();
@@ -365,7 +370,7 @@ public class LevelController : MonoBehaviour {
 
         // Màn chuyển là LevelFactory, đã có sẵn tất cả các GameObject
         if (index == 1) {
-            Debug.Log("dd");
+            //Debug.Log("dd");
 
             //Destroy(GameObject.FindWithTag("Menu"));
             //Destroy(GameObject.FindWithTag("Robot"));
@@ -425,6 +430,7 @@ public class LevelController : MonoBehaviour {
 
     void SetupScene() {
         this.nextBackgroundPrefabName = prefabBackground.name;
+        spawner.Start();
     }
 
     void PreSceneLoad(int nextLevelIndex) {
@@ -486,12 +492,18 @@ public class LevelController : MonoBehaviour {
         switch (levelIndex) {
             case 1:
                 SPEED_MULTIPLIER = 2f;
+                spawner.maxObs = 5;
+                spawner.interval = 1.2f;
                 break;
             case 2:
                 SPEED_MULTIPLIER = 2.5f;
+                spawner.maxObs = 10;
+                spawner.interval = 2f;
                 break;
             case 3:
                 SPEED_MULTIPLIER = 3f;
+                spawner.maxObs = 14;
+                spawner.interval = 1.9f;
                 break;
             default:
                 SPEED_MULTIPLIER = 2f;

@@ -15,12 +15,14 @@ namespace Obstacle {
         // Những biến chưa được sử dụng
         private GameObject ball1, ball2, laser;
         private float seconds;
+        private float created;
 
         void Start() {
             this.ball1 = this.gameObject.transform.GetChild(0).gameObject;
             this.ball2 = this.gameObject.transform.GetChild(1).gameObject;
             this.laser = this.gameObject.transform.GetChild(2).gameObject;
             this.speed = SPEED;
+            created = Time.time * 1000;
         }
 
         void Update() {
@@ -29,5 +31,13 @@ namespace Obstacle {
             Vector3 movement = new Vector3(-speed, 0, 0);
             transform.Translate(movement * Time.deltaTime, Space.World);
         }
+
+        void OnTriggerEnter2D(Collider2D other) {
+            if (other.gameObject.tag.Equals("Obstacle")) {
+                if (other.gameObject.name.StartsWith("LaserBeam") && other.gameObject.GetComponent<LaserBeam>().created < this.gameObject.GetComponent<LaserBeam>().created) {
+                    Destroy(this.gameObject);
+                }
+            }
+         }   
     }
 }
