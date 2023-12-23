@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,11 +27,6 @@ public class PlatformerRobot : MonoBehaviour
     public int life;
 
     public GameObject gameOverUI;
-
-    // //jumpfire
-    // public ParticleSystem jumpFire;
-    // //Trang thai bay
-    // bool isJumping = false;
 
     void Awake()
     {
@@ -171,31 +163,4 @@ public class PlatformerRobot : MonoBehaviour
     private void DisableBlink() {
         robotChopChop.SetActive(false);
     }
-
-    // void OnCollisionEnter2D(Collision2D collision)
-    // {
-    //     if (collision.gameObject.tag.Equals("Ground")) {
-    //         onGround = true;
-    //     }
-    // }
-
-    // void FixedUpdate()
-    // {
-    //     // Code kiểm tra Robot đang nhảy
-
-    //     if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow))
-    //     {
-    //         isJumping = true;
-    //         jumpIncreaseTime += Time.fixedDeltaTime;
-
-    //         if (jumpForce < MAX_JUMP_FORCE && jumpIncreaseTime - lastForceIncreasedTime >= 0.1f) {
-    //             jumpForce = Math.Min(MAX_JUMP_FORCE, jumpForce + (MAX_JUMP_FORCE - MIN_JUMP_FORCE) / 10);
-    //             lastForceIncreasedTime = jumpIncreaseTime;
-    //         }
-
-    //         body.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-    //         jumpDecreaseTime = 0f;
-    //         lastForceDecreasedTime = 0;
-    //     }
-    // }
 }

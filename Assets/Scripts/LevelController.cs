@@ -1,14 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using Obstacle;
-using Unity.VisualScripting;
 using UnityEngine.SceneManagement;
-using UnityEngine.Assertions;
-using System.Linq;
-using UnityEditor;
-
 
 public class LevelController : MonoBehaviour {
     /**
@@ -32,6 +25,9 @@ public class LevelController : MonoBehaviour {
     public static float MIN_PLAY_Y, MAX_PLAY_Y;
     public static float SPEED_MULTIPLIER = 2f;
 
+    /**
+    * Các prefab ([SerializeField] để Unity hiểu đây là tham số cần truyền trong Editor)
+    */
     [SerializeField]
     private GameObject floor;
     [SerializeField]
@@ -49,17 +45,18 @@ public class LevelController : MonoBehaviour {
     [SerializeField]
     private GameObject prefabBackground;
 
+    /**
+    * Thời gian giữa các lần spawn chướng ngại vật dưới.
+    */
     private float cayChupSeconds;
     private float rocketSeconds;
     private float laserSeconds;
-    private float accelerationArc3 = 5.0f;
 
     /**
     * Trạng thái Màn chơi. 
     */
     public State state;
     private int levelIndex = 1;
-    private string[] levelNames = { "LevelFactory", "LevelSea", "LevelLava", "LevelForest", "LevelDesert", "LevelSnow", "LevelGalaxy"};
 
     /**
     * List chướng ngại vật còn nằm trong Camera.
@@ -68,10 +65,6 @@ public class LevelController : MonoBehaviour {
 
     public float initialSpeed = 5f; // Tốc độ ban đầu của chướng ngại vật
     public float acceleration = 0.5f; // Tốc độ gia tăng
-    /**
-    * Tốc độ Scroll
-    */
-    private float scrollSpeed = 2f;
 
     /**
     * UpdateBackground
@@ -81,13 +74,11 @@ public class LevelController : MonoBehaviour {
     private GameObject firstBackground;
 
     public float arcPlaySeconds;
-
-    private float currentSpeed; // Tốc độ hiện tại của chướng ngại vật
-
     public GameObject Obstacles; // Tham chiếu đến game object của chướng ngại vật
-    private GameObject middlegroundGlass;
-    private GameObject backgroundFactoryWall;
 
+    /**
+    * Spawn chướng ngại vật theo thuật toán.
+    */
     ObstacleSpawner spawner;
 
     /**
@@ -105,7 +96,7 @@ public class LevelController : MonoBehaviour {
         WIDTH = 17.7f;
 
         // Chỉnh Camera
-        float ratio = (float) Screen.width / Screen.height;
+        float ratio = (float)Screen.width / Screen.height;
 
         Camera.main.orthographicSize = Mathf.Max(5f, 1 / ratio * 18.1f * 0.5f - 0.01f);
 
@@ -123,9 +114,8 @@ public class LevelController : MonoBehaviour {
 
         SceneManager.sceneLoaded += PostSceneLoad;
     }
-   
-    private void Start()
-    {
+
+    private void Start() {
         // Chỉnh Camera
         float margin = (CAMERA_WIDTH - 18.1f) / (CAMERA_WIDTH);
         Camera.main.rect = new Rect(margin, 0f, 1f - 2 * margin, 1f);
@@ -136,7 +126,6 @@ public class LevelController : MonoBehaviour {
         MAX_X = WIDTH / 2;
 
         this.activeObstacles = new List<GameObject>();
-        currentSpeed = initialSpeed;       
 
         // Các GameObject ko được destroy khi chuyển scene.
         DontDestroyOnLoad(GameObject.FindWithTag("Menu"));
@@ -149,42 +138,19 @@ public class LevelController : MonoBehaviour {
         SetupScene();
     }
 
-    private void Update()
-    {
+    private void Update() {
         if (this.state == State.PAUSE) {
             return;
         }
 
-        if (this.state == State.PLAYING ) {
+        if (this.state == State.PLAYING) {
             // Gọi hàm pawn tương ứng cho mỗi arc khi trò chơi bắt đầu
-            if (SceneManager.GetActiveScene().name == "LevelFactory")
-            {
+            if (SceneManager.GetActiveScene().name == "LevelFactory") {
                 SpawnArc1();
-                //currentSpeed += accelerationArc3 * Time.deltaTime;
-            }
-            else if (SceneManager.GetActiveScene().name == "LevelSea")
-            {
+            } else if (SceneManager.GetActiveScene().name == "LevelSea") {
                 SpawnArc2();
-            }
-            else if (SceneManager.GetActiveScene().name == "LevelLava")
-            {
+            } else if (SceneManager.GetActiveScene().name == "LevelLava") {
                 SpawnArc3();
-            }
-            else if (SceneManager.GetActiveScene().name == "LevelForest")
-            {
-                PawnArc4();
-            }
-            else if (SceneManager.GetActiveScene().name == "LevelDesert")
-            {
-                PawnArc5();
-            }
-            else if (SceneManager.GetActiveScene().name == "LevelSnow")
-            {
-                PawnArc6();
-            }
-            else if (SceneManager.GetActiveScene().name == "LevelGalaxy")
-            {
-                PawnArc7();
             }
 
             spawner.Update();
@@ -197,12 +163,6 @@ public class LevelController : MonoBehaviour {
             UpdateBackground();
             ChangeArc();
         }
-
-        // Tăng tốc độ của chướng ngại vật dần dần
-        //currentSpeed += acceleration * Time.deltaTime;
-
-        // Di chuyển chướng ngại vật theo tốc độ hiện tại
-        //transform.Translate(Vector3.forward * currentSpeed * Time.deltaTime);
 
         // Không trong state PLAYING cũng có thể có obstacle.
         // Xóa Chướng ngại vật sau khi ra khỏi Camera.
@@ -222,18 +182,17 @@ public class LevelController : MonoBehaviour {
                 width = obstacle.GetComponent<SpriteRenderer>().bounds.size.x;
             }
 
-            width /= 2; 
+            width /= 2;
 
             if (obstacle.name.StartsWith("CayChup")) {
                 if (obstacle.transform.position.x <= -WIDTH / 2 - 30) {
                     Destroy(obstacle);
                     this.activeObstacles.RemoveAt(i);
                 }
-            } 
-            else if (obstacle.transform.position.x <= -WIDTH / 2 - width) {
+            } else if (obstacle.transform.position.x <= -WIDTH / 2 - width) {
                 Destroy(obstacle);
                 this.activeObstacles.RemoveAt(i);
-            } 
+            }
         }
     }
 
@@ -242,58 +201,25 @@ public class LevelController : MonoBehaviour {
         this.state = State.STOPPED;
     }
 
-    /* Spawn Arc */
-    private void SpawnArc1()
-    {
+    /* Spawn Arc theo vị trí Player */
+    private void SpawnArc1() {
         // Chỉ spawn tên lửa ở arc 1
         SpawnProjectiles();
     }
 
-    private void SpawnArc2()
-    {
+    private void SpawnArc2() {
         // Spawn cả tên lửa và laser ở arc 2
         SpawnProjectiles();
         SpawnLaserBeam();
         SpawnCayChup();
     }
 
-    private void SpawnArc3()
-    {
+    private void SpawnArc3() {
         // Spawn tên lửa, laser và cây chụp ở arc 3
         SpawnProjectiles();
         SpawnLaserBeam();
         SpawnCayChup();
     }
-
-    private void PawnArc4()
-    {
-        // Spawn tên lửa mức medium
-        SpawnProjectilesHard();
-        SpawnLaserBeam();
-        SpawnCayChup();
-    }
-    private void PawnArc5()
-    {
-        // Spawn tên lửa, cây chụp mức medium
-        SpawnProjectilesHard();
-        SpawnLaserBeam();
-        SpawnCayChupMedium();
-    }
-    private void PawnArc6()
-    {
-        // Spawn cả 3 tên lửa, laser và cây chụp mức Medium
-        SpawnProjectilesHard();
-        SpawnLaserBeamMedium();
-        SpawnCayChupMedium();
-    }
-    private void PawnArc7()
-    {
-        // Spawn tên lửa, laser và cây chụp siêu khó
-        SpawnProjectilesHard();
-        SpawnLaserBeamHard();
-        SpawnCayChupHard();
-    }
-
 
     /* Scene Load */
     GameObject[] objects;
@@ -335,12 +261,12 @@ public class LevelController : MonoBehaviour {
                         break;
                     }
                 }
-                
+
                 // Đợi tới Frame có Factory Bg
                 if (!force && !allFactoryWall) {
                     return;
                 }
-                
+
                 // Còn chướng ngại vật, ko chuyển.
                 if (!force && this.activeObstacles.Count > 0) {
                     return;
@@ -397,37 +323,6 @@ public class LevelController : MonoBehaviour {
         arcPlaySeconds = 0;
     }
 
-    /**
-    * Trả về levelIndex của scene tiếp theo nếu load thành công,
-    * Hoặc levelIndex cũ nếu chưa load được.
-    **/
-    // public static int ChangeScene(int levelIndex) {
-    //     GameObject[] objects = GameObject.FindGameObjectsWithTag("Background");
-    //     // Background ở vị trí phải nhất
-    //     GameObject background = objects[0];
-        
-    //     // Đợi tới Frame có Factory Bg
-    //     if (!background.name.StartsWith("FactoryWall")) {
-    //         return levelIndex;
-    //     }
-       
-    //     // Giữ cho Scene sau
-    //     foreach (GameObject obj in objects) {
-    //         DontDestroyOnLoad(obj);
-    //     }
-
-    //     GameObject.Find("TransitionFade").GetComponent<Animator>().SetBool("changing_scene", true);
-
-    //     // Chuyển scene
-    //     if (levelIndex == 3) {
-    //         // TODO Làm gì khi tới màn cuối.
-    //     } else {
-    //         SceneManager.LoadScene(++levelIndex, LoadSceneMode.Single);
-    //     }
-
-    //     return levelIndex;
-    // }
-
     void SetupScene() {
         this.nextBackgroundPrefabName = prefabBackground.name;
         spawner.Start();
@@ -439,28 +334,28 @@ public class LevelController : MonoBehaviour {
         // TODO Thêm chỉ số vào sau prefab để dễ thêm
         switch (nextLevelIndex) {
             case 1:
-                prefabBackground = (GameObject) Resources.Load("Prefabs/Background/Factory");
+                prefabBackground = (GameObject)Resources.Load("Prefabs/Background/Factory");
 
-                prefabLaser = (GameObject) Resources.Load("Prefabs/Laser");
-                prefabLaserBall = (GameObject) Resources.Load("Prefabs/LaserBall");
-                prefabRocket = (GameObject) Resources.Load("Prefabs/Rocket");
-                prefabCayChup = (GameObject) Resources.Load("Prefabs/CayChup");
+                prefabLaser = (GameObject)Resources.Load("Prefabs/Laser");
+                prefabLaserBall = (GameObject)Resources.Load("Prefabs/LaserBall");
+                prefabRocket = (GameObject)Resources.Load("Prefabs/Rocket");
+                prefabCayChup = (GameObject)Resources.Load("Prefabs/CayChup");
                 break;
             case 2:
-                prefabBackground = (GameObject) Resources.Load("Prefabs/Background/Ocean");
-                
-                prefabLaser = (GameObject) Resources.Load("Prefabs/Laser2");
-                prefabLaserBall = (GameObject) Resources.Load("Prefabs/LaserBall2");
-                prefabRocket = (GameObject) Resources.Load("Prefabs/Rocket2");
-                prefabCayChup = (GameObject) Resources.Load("Prefabs/CayChup2");
+                prefabBackground = (GameObject)Resources.Load("Prefabs/Background/Ocean");
+
+                prefabLaser = (GameObject)Resources.Load("Prefabs/Laser2");
+                prefabLaserBall = (GameObject)Resources.Load("Prefabs/LaserBall2");
+                prefabRocket = (GameObject)Resources.Load("Prefabs/Rocket2");
+                prefabCayChup = (GameObject)Resources.Load("Prefabs/CayChup2");
                 break;
             case 3:
-                prefabBackground = (GameObject) Resources.Load("Prefabs/Background/End");
-                
-                prefabLaser = (GameObject) Resources.Load("Prefabs/Laser");
-                prefabLaserBall = (GameObject) Resources.Load("Prefabs/LaserBall");
-                prefabRocket = (GameObject) Resources.Load("Prefabs/Rocket");
-                prefabCayChup = (GameObject) Resources.Load("Prefabs/CayChup");
+                prefabBackground = (GameObject)Resources.Load("Prefabs/Background/End");
+
+                prefabLaser = (GameObject)Resources.Load("Prefabs/Laser");
+                prefabLaserBall = (GameObject)Resources.Load("Prefabs/LaserBall");
+                prefabRocket = (GameObject)Resources.Load("Prefabs/Rocket");
+                prefabCayChup = (GameObject)Resources.Load("Prefabs/CayChup");
                 break;
             default:
                 break;
@@ -492,17 +387,17 @@ public class LevelController : MonoBehaviour {
         switch (levelIndex) {
             case 1:
                 SPEED_MULTIPLIER = 2f;
-                spawner.maxObs = 5;
+                spawner.maxObstacleCount = 5;
                 spawner.interval = 1.2f;
                 break;
             case 2:
                 SPEED_MULTIPLIER = 2.5f;
-                spawner.maxObs = 10;
+                spawner.maxObstacleCount = 10;
                 spawner.interval = 2f;
                 break;
             case 3:
                 SPEED_MULTIPLIER = 3f;
-                spawner.maxObs = 14;
+                spawner.maxObstacleCount = 14;
                 spawner.interval = 1.9f;
                 break;
             default:
@@ -551,7 +446,7 @@ public class LevelController : MonoBehaviour {
         }
 
         // Chỉnh Camera
-        float ratio = (float) Screen.width / Screen.height;
+        float ratio = (float)Screen.width / Screen.height;
         Camera.main.orthographicSize = Mathf.Max(5f, 1 / ratio * 18.1f * 0.5f - 0.01f);
         float margin = (CAMERA_WIDTH - 18.1f) / (CAMERA_WIDTH);
         Camera.main.rect = new Rect(margin, 0f, 1f - 2 * margin, 1f);
@@ -566,16 +461,6 @@ public class LevelController : MonoBehaviour {
             firstBackground = tmpObjects[0];
 
             if (firstBackground != null) {
-                // Cho tốc độ scroll của Outside là 1 khi Outside ở vị trí gốc tọa độ (chiếm toàn Camera).
-                // Trước đó có thể > 1 nên chỉnh lại.
-                // if (firstBackground.name.StartsWith("Background")) {
-                //     MovingFloor scriptMovingFloor = firstBackground.GetComponent<MovingFloor>();
-
-                //     if (scriptMovingFloor.moveSpeed != 1f && firstBackground.transform.position.x >= 0f) {
-                //         scriptMovingFloor.moveSpeed = 1f;
-                //     }
-                // }
-
                 if (nextBackgroundPrefabName != null && !firstBackground.name.StartsWith(nextBackgroundPrefabName)) {
                     scrollSeconds = 0;
                 } else {
@@ -613,7 +498,7 @@ public class LevelController : MonoBehaviour {
                     scriptMovingFloor.prefabMoveSpeed = 1.5f;
 
                     nextBackgroundPrefabName = prefabFactoryWall.name;
-                } 
+                }
             }
         }
     }
@@ -624,34 +509,6 @@ public class LevelController : MonoBehaviour {
 
         // Sau 3 giây mới spawn 1 tên lửa
         if (rocketSeconds < 3) {
-            return;
-        }
-
-        // Khởi tạo Tên lửa
-        GameObject rocket = Instantiate(prefabRocket);
-        float x = WIDTH / 2 + 25;
-        GameObject robot = GameObject.FindGameObjectWithTag("Robot");
-        float y = robot.transform.position.y;
-        float y1 = y - 1f;
-        if (y1 < -2f) y1 = -2f;
-        float y2 = y + 1f;
-        if (y2 > 4.5f) y2 = 4.5f;
-        // Set vị trí
-        rocket.transform.position = new Vector3(x, Random.Range(y1, y2), 0);
-        // Phần thừa, đừng để ý
-        ProjectileRocket script = rocket.GetComponent<ProjectileRocket>();
-        script.moveUpwards = Random.Range(0, 2) == 0;
-
-        this.activeObstacles.Add(rocket);
-
-        rocketSeconds = 0;
-    }
-    
-    private void SpawnProjectilesHard() {
-        rocketSeconds += Time.deltaTime;
-
-        // Sau 2 giây mới spawn 1 tên lửa
-        if (rocketSeconds < 2) {
             return;
         }
 
@@ -717,26 +574,6 @@ public class LevelController : MonoBehaviour {
         cayChupSeconds = 0;
     }
 
-    private void SpawnCayChupHard() {
-        cayChupSeconds += Time.deltaTime;
-
-        // Sau 3 giây mới spawn 1 tên lửa
-        if (cayChupSeconds < 3) {
-            return;
-        }
-
-        GameObject caychup = Instantiate(prefabCayChup);
-        float x = -WIDTH / 2 - 25;
-        // Set vị trí
-        caychup.transform.position = new Vector3(x, Random.Range(-2f, 4.5f), 0);
-        // Phần thừa, đừng để ý
-        // CayChup script = caychup.GetComponent<CayChup>();
-        // script.moveUpwards = Random.Range(0, 2) == 0;
-
-        this.activeObstacles.Add(caychup);
-
-        cayChupSeconds = 0;
-    }
     /**
     * Laser Beam = Ball 1, 2 + laser
     */
@@ -787,99 +624,6 @@ public class LevelController : MonoBehaviour {
         laserSeconds = 0;
     }
 
-    private void SpawnLaserBeamMedium() {
-        laserSeconds += Time.deltaTime;
-
-        // Sau Random(4, 7) giây mới spawn laser beam
-        if (laserSeconds < Random.Range(4, 7)) {
-            return;
-        }
-
-        float minLaserLength = 2f, maxLaserLength = 5f;
-        // Random khoảng cách giữa 2 ball
-        float distanceToCameraRegion = Random.Range(minLaserLength, maxLaserLength);
-
-        // Random tọa độ ball 1
-        Vector3 ballPos1 = new Vector3(MAX_X + distanceToCameraRegion, Random.Range(MIN_PLAY_Y + LaserBeam3.BALL_RADIUS, MAX_PLAY_Y - LaserBeam3.BALL_RADIUS));
-        Vector3 ballPos2;
-        Quaternion rotation;
-
-        // TODO Tìm ball 2, sao cho vị trí ball 2 nằm trong Camera.
-        rotation = Quaternion.AngleAxis(Random.Range(-180f, 180f), new Vector3(0, 0, 1));
-        // Tọa độ ball 2 = ballPos1 + vector (1, 0, 0) quay quanh trục z góc theta
-        ballPos2 = rotation * Vector3.right * (distanceToCameraRegion - LaserBeam3.BALL_RADIUS) + ballPos1;
-
-        // Frame này ko tìm thấy, để frame sau.
-        if (!(MIN_PLAY_Y + LaserBeam3.BALL_RADIUS + PlatformerRobot.ROBOT_HEIGHT <= ballPos2.y && ballPos2.y <= MAX_PLAY_Y - PlatformerRobot.ROBOT_HEIGHT)) {
-            return;
-        }
-
-        Vector3 laserPos = (ballPos1 + ballPos2) / 2;
-
-        // Khởi tạo ball 1, 2 và tia laser
-        GameObject ball1 = Instantiate(prefabLaserBall, ballPos1, Quaternion.identity);
-        GameObject ball2 = Instantiate(prefabLaserBall, ballPos2, Quaternion.identity);
-        GameObject laser = Instantiate(prefabLaser, laserPos, rotation);
-        laser.transform.localScale = new Vector3(Vector3.Distance(ballPos1, ballPos2) * (32f / 128f), laser.transform.localScale.y);
-
-        // Vị trí của 3 GameObject con (ball 1 + 2, laser) sẽ trở nên tương đối với GameObject parent (laserBeam).
-        // Tức là laserBeam làm gốc tọa độ của 3 GameObject con
-        GameObject laserBeam3 = Instantiate(prefabLaserBeam, laserPos, Quaternion.identity);
-        ball1.transform.parent = laserBeam3.transform;
-        ball2.transform.parent = laserBeam3.transform;
-        laser.transform.parent = laserBeam3.transform;
-
-        this.activeObstacles.Add(laserBeam3);
-
-        laserSeconds = 0;
-    }
-    private void SpawnLaserBeamHard() {
-        laserSeconds += Time.deltaTime;
-
-        // Sau Random(3, 6) giây mới spawn laser beam
-        if (laserSeconds < Random.Range(3, 6)) {
-            return;
-        }
-
-        float minLaserLength = 2f, maxLaserLength = 5f;
-        // Random khoảng cách giữa 2 ball
-        float distanceToCameraRegion = Random.Range(minLaserLength, maxLaserLength);
-
-        // Random tọa độ ball 1
-        Vector3 ballPos1 = new Vector3(MAX_X + distanceToCameraRegion, Random.Range(MIN_PLAY_Y + LaserBeam3.BALL_RADIUS, MAX_PLAY_Y - LaserBeam3.BALL_RADIUS));
-        Vector3 ballPos2;
-        Quaternion rotation;
-
-        // TODO Tìm ball 2, sao cho vị trí ball 2 nằm trong Camera.
-        rotation = Quaternion.AngleAxis(Random.Range(-180f, 180f), new Vector3(0, 0, 1));
-        // Tọa độ ball 2 = ballPos1 + vector (1, 0, 0) quay quanh trục z góc theta
-        ballPos2 = rotation * Vector3.right * (distanceToCameraRegion - LaserBeam3.BALL_RADIUS) + ballPos1;
-
-        // Frame này ko tìm thấy, để frame sau.
-        if (!(MIN_PLAY_Y + LaserBeam3.BALL_RADIUS + PlatformerRobot.ROBOT_HEIGHT <= ballPos2.y && ballPos2.y <= MAX_PLAY_Y - PlatformerRobot.ROBOT_HEIGHT)) {
-            return;
-        }
-
-        Vector3 laserPos = (ballPos1 + ballPos2) / 2;
-
-        // Khởi tạo ball 1, 2 và tia laser
-        GameObject ball1 = Instantiate(prefabLaserBall, ballPos1, Quaternion.identity);
-        GameObject ball2 = Instantiate(prefabLaserBall, ballPos2, Quaternion.identity);
-        GameObject laser = Instantiate(prefabLaser, laserPos, rotation);
-        laser.transform.localScale = new Vector3(Vector3.Distance(ballPos1, ballPos2) * (32f / 128f), laser.transform.localScale.y);
-
-        // Vị trí của 3 GameObject con (ball 1 + 2, laser) sẽ trở nên tương đối với GameObject parent (laserBeam).
-        // Tức là laserBeam làm gốc tọa độ của 3 GameObject con
-        GameObject laserBeam3 = Instantiate(prefabLaserBeam, laserPos, Quaternion.identity);
-        ball1.transform.parent = laserBeam3.transform;
-        ball2.transform.parent = laserBeam3.transform;
-        laser.transform.parent = laserBeam3.transform;
-
-        this.activeObstacles.Add(laserBeam3);
-
-        laserSeconds = 0;
-    }
-
     /* Trạng thái của Màn chơi */
     public enum State {
         PLAYING,
@@ -887,7 +631,7 @@ public class LevelController : MonoBehaviour {
         * Từ khi arcPlaySeconds >= arcTotalSeconds đến trước khi Scene mới đã được load
         * Không có chướng ngại vật nào trong trạng thái này.
         */
-        CHANGING_SCENE, 
+        CHANGING_SCENE,
         PAUSE,
         STOPPED // Khi Robot va chạm với Obstacle 
     }

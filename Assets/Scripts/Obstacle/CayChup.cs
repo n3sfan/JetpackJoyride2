@@ -19,7 +19,6 @@ namespace Obstacle {
         private GameObject alertRocket;
         // Giây
         private float seconds;
-        private float speed;
         
         // Lần trước quay lên hay xuống?
         private bool rotateUp;
